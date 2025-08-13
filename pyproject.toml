@@ -1,0 +1,19 @@
+[project]
+name = "etlsus"
+version = "0.2.0"
+description = ""
+authors = [
+    {name = "morsoletodev",email = "106322393+morsoletodev@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pandas (>=2.3.1,<3.0.0)",
+    "pyyaml (>=6.0.2,<7.0.0)",
+    "python-dotenv (>=1.1.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
