@@ -19,3 +19,9 @@ PROCESSED_DIR = DATA_DIR / 'processed'
 
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+
+USER = os.environ['user']
+PASSWORD = os.environ['password']
+HOST = os.environ['host']
+PORT = os.environ['port']
+DB = os.environ['db']
