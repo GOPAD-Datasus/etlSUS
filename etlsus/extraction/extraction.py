@@ -10,6 +10,9 @@ def extract(input_file_url: str) -> None:
     """
     Main extraction function. Downloads from every url
     inside the files key from input.yaml file.
+
+    param:
+        input_file_url (str): Path to the yaml file
     """
     raw_folder = config.RAW_DIR
     extension = '.csv'
