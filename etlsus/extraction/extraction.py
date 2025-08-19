@@ -7,7 +7,7 @@ from .utils import get_yaml_urls
 from etlsus.files import check_file_exists
 
 
-def extract(input_file_url: str) -> None:
+def extract(input_file_url: str, verbosity: bool = False) -> None:
     """
     Main extraction function. Downloads from every url
     inside the files key from input.yaml file.
@@ -26,6 +26,10 @@ def extract(input_file_url: str) -> None:
                                    f'{prefix}{year}{extension}')
 
         if not check_file_exists(output_file):
+            if verbosity:
+                print(f'Downloading: {source_link}\n'
+                      f' ↳ Saving at: {output_file}')
+
             try:
                 urlretrieve(source_link,
                             output_file)
@@ -35,3 +39,6 @@ def extract(input_file_url: str) -> None:
                     f'Please verify the url in input.yaml'
                 )
                 warnings.warn(error_msg)
+
+    if verbosity:
+        print('Finished downloading files')
