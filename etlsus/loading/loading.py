@@ -4,7 +4,7 @@ import pandas as pd
 
 import config
 from .database import create_db_engine, insert_into_db
-from files import get_files_from_dir
+from etlsus.files import get_files_from_dir
 
 
 def load(table_name: str, **kwargs) -> None:

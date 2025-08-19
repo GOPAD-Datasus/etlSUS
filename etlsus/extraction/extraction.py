@@ -4,7 +4,7 @@ from urllib.request import urlretrieve
 
 import config
 from .utils import get_yaml_urls
-from files import check_file_exists
+from etlsus.files import check_file_exists
 
 
 def extract(input_file_url: str) -> None:

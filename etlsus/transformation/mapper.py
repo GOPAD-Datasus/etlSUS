@@ -3,7 +3,7 @@ import warnings
 import yaml
 
 from .handlers import Handler
-from files import get_config_file
+from etlsus.files import get_config_file
 
 
 def apply_transformations(transformations_input: dict, handler):

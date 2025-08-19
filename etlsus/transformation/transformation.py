@@ -1,5 +1,5 @@
-from transformation.mapper import transform_file
-from files import check_if_processed, get_files_from_dir
+from .mapper import transform_file
+from etlsus.files import check_if_processed, get_files_from_dir
 
 import config
 

@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 
 import config
-from transformation.handlers.utils.time import TimeHandler
+from .utils.time import TimeHandler
 
 
 class Handler:
