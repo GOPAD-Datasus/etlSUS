@@ -1,4 +1,5 @@
 import os
+import warnings
 from urllib.request import urlretrieve
 
 import config
@@ -33,4 +34,4 @@ def extract(input_file_url: str) -> None:
                     f'Failed to download {year}: {e}\n'
                     f'Please verify the url in input.yaml'
                 )
-                print(f'Warning: {error_msg}')
+                warnings.warn(error_msg)

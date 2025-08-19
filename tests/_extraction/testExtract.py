@@ -1,5 +1,6 @@
 import os
 import unittest
+import warnings
 from unittest.mock import patch
 from urllib.error import URLError
 
@@ -68,9 +69,7 @@ class TestExtract(unittest.TestCase):
     @patch('etlsus.extraction.extraction.get_yaml_urls')
     @patch('etlsus.extraction.extraction.check_file_exists')
     @patch('etlsus.extraction.extraction.urlretrieve')
-    @patch('builtins.print')
     def test_extract_handles_download_errors(self,
-                                             mock_print,
                                              mock_urlretrieve,
                                              mock_check_file,
                                              mock_get_yaml):
@@ -89,16 +88,17 @@ class TestExtract(unittest.TestCase):
 
         mock_urlretrieve.side_effect = mock_urlretrieve_side_effect
 
-        extract('dummy_input.yaml')
+        with warnings.catch_warnings(record=True) as w:
+            extract('dummy_input.yaml')
 
-        mock_urlretrieve.assert_any_call(
-            'http://example.com/data2020.csv',
-            os.path.join('/mock/raw/dir', 'prefix_2020.csv')
-        )
+            mock_urlretrieve.assert_any_call(
+                'http://example.com/data2020.csv',
+                os.path.join('/mock/raw/dir', 'prefix_2020.csv')
+            )
 
-        mock_print.assert_called()
-        self.assertIn('Warning: Failed to download 2021',
-                      mock_print.call_args[0][0])
+            self.assertEqual(len(w), 1)
+            self.assertIn('Failed to download 2021',
+                          str(w[0].message))
 
     @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     @patch('etlsus.extraction.extraction.get_yaml_urls')
