@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Callable, Union
 
 import config
 
@@ -34,7 +34,7 @@ def get_files_from_dir(folder_dir: str, endswith: str) -> List[str]:
             if f.endswith(endswith)]
 
 
-def get_config_file(raw_file_path: str | Path) -> str | None:
+def get_config_file(raw_file_path: str | Path) -> Union[Path, None]:
     file_name, _ = os.path.basename(raw_file_path).split('.')
     file_name += '.yaml'
 
@@ -42,4 +42,4 @@ def get_config_file(raw_file_path: str | Path) -> str | None:
 
     for root, dirs, files in os.walk(input_dir):
         if file_name in files:
-            return os.path.join(root, file_name)
+            return Path(os.path.join(root, file_name)).resolve()
