@@ -4,7 +4,7 @@ import pandas as pd
 
 import config
 from .database import create_db_engine, insert_into_db
-from files import load_files
+from files import get_files_from_dir
 
 
 def load(table_name: str, **kwargs) -> None:
@@ -25,7 +25,8 @@ def load(table_name: str, **kwargs) -> None:
                            f' engine: {str(e)}') from e
 
     try:
-        file_list = load_files(config.PROCESSED_DIR, endswith='.parquet')
+        file_list = get_files_from_dir(config.PROCESSED_DIR,
+                                       endswith='.parquet')
         if not file_list:
             warnings.warn('No parquet files found in processed directory')
             return
