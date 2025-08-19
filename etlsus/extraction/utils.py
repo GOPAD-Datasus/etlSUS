@@ -36,3 +36,7 @@ def get_yaml_urls (input_file_url: str) -> Tuple[dict, str]:
     except FileNotFoundError:
         error_msg = f'File path {input_file_url} incorrect'
         raise RuntimeError(error_msg)
+
+    except yaml.YAMLError:
+        error_msg = f'Incorrect Yaml structure in {input_file_url}'
+        raise RuntimeError(error_msg)
