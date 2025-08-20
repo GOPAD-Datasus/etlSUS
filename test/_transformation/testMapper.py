@@ -43,7 +43,7 @@ class TestMapper(unittest.TestCase):
     @patch(f'{module}.apply_transformations')
     @patch('builtins.open', new_callable=mock_open)
     def test_transform_file_success(self, mock_open_file, mock_apply,
-                                   mock_handler, mock_get_config):
+                                    mock_handler, mock_get_config):
         mock_get_config.return_value = '/path/to/config.yaml'
         config_data = {
             'read_variables':  {'var1': 'value1'},

@@ -26,7 +26,7 @@ class TestTransformation(unittest.TestCase):
     @patch(f'{module}.check_if_processed', return_value=False)
     @patch(f'{module}.transform_file')
     def test_transform_no_files(self, mock_transform_file,
-                               mock_check, mock_get_files):
+                                mock_check, mock_get_files):
         transform()
 
         self.assertEqual(0, mock_transform_file.call_count)
