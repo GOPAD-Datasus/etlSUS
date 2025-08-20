@@ -2,7 +2,7 @@ import unittest
 
 import pandas as pd
 
-from transformation.handlers.utils.time import TimeHandler
+from etlsus.transformation.handlers.utils.time import TimeHandler
 
 
 class TestTime(unittest.TestCase):

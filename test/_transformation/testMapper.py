@@ -5,7 +5,7 @@ from unittest.mock import patch, MagicMock, mock_open
 import yaml
 
 from etlsus.transformation.mapper import apply_transformations, transform_file
-from transformation.handlers import Handler
+from etlsus.transformation.handlers import Handler
 
 
 class TestMapper(unittest.TestCase):

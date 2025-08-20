@@ -1,16 +1,14 @@
 import unittest
 from unittest.mock import patch
 
-from extraction.utils import get_yaml_urls
+from etlsus.extraction.utils import get_yaml_urls
 
 
 class TestUtils(unittest.TestCase):
 
     @patch('builtins.open')
     @patch('etlsus.extraction.utils.yaml.safe_load')
-    def test_get_yaml_urls_correct(self,
-                                   mock_safe_load,
-                                   mock_file_open):
+    def test_get_yaml_urls_correct(self, mock_safe_load, _):
         
         mock_safe_load.return_value = (
             {
@@ -28,9 +26,7 @@ class TestUtils(unittest.TestCase):
 
     @patch('builtins.open')
     @patch('etlsus.extraction.utils.yaml.safe_load')
-    def test_get_yaml_urls_incorrect(self,
-                                     mock_safe_load,
-                                     mock_file_open):
+    def test_get_yaml_urls_incorrect(self, mock_safe_load, _):
         mock_safe_load.return_value = {}
 
         faulty = 'dummy_input.yaml'

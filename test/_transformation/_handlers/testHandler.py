@@ -31,13 +31,13 @@ class TestHandler(unittest.TestCase):
     def test_init(self):
         # Test if DataFrame is loaded correctly
         self.assertEqual(len(self.handler.df), 2)
-        self.assertListEqual(list(self.handler.df.columns), ['col1', 'col2'])
+        self.assertListEqual(list(self.handler.df.columns),
+                             ['col1', 'col2', 'col3'])
 
     def test_save(self):
-        # Override config.PROCESSED_DIR for the test
         with patch('config.PROCESSED_DIR', self.test_dir):
             self.handler.save('test_output')
-            output_path = Path(self.test_dir + 'test_output.parquet.gzip')
+            output_path = Path(self.test_dir + '/test_output.parquet.gzip')
             # Check if file exists
             self.assertTrue(output_path.exists())
             # Read back and verify data
@@ -51,34 +51,35 @@ class TestHandler(unittest.TestCase):
         self.assertTrue(self.handler.df['new_col'].isna().all())
 
         # Add multiple columns
-        self.handler.add_cols(['col3', 'col4'])
-        self.assertListEqual(['col3', 'col4'],
+        self.handler.add_cols(['col4', 'col5'])
+        self.assertListEqual(['col4', 'col5'],
                              list(self.handler.df.columns[-2:]))
-        self.assertTrue(self.handler.df[['col3', 'col4']].isna().all().all())
+        self.assertTrue(self.handler.df[['col4', 'col5']].isna().all().all())
 
     def test_remove_cols(self):
         # Remove single column
-        self.handler.remove_cols('col1')
+        self.handler.remove_cols(['col1'])
         self.assertNotIn('col1', self.handler.df.columns)
 
         # Remove multiple columns
         self.handler.remove_cols(['col1', 'col2'])  # col1 already removed
-        self.assertListEqual(list(self.handler.df.columns), [])
+        self.assertListEqual(list(self.handler.df.columns), ['col3'])
 
     def test_rename_cols(self):
         self.handler.rename_cols({'col1': 'new_col1', 'col2': 'new_col2'})
         self.assertListEqual(list(self.handler.df.columns),
-                             ['new_col1', 'new_col2'])
+                             ['new_col1', 'new_col2', 'col3'])
 
     def test_organize_cols(self):
         # Reorder columns
         self.handler.organize_cols(['col2', 'col1'])
-        self.assertListEqual(list(self.handler.df.columns), ['col2', 'col1'])
+        self.assertListEqual(list(self.handler.df.columns),
+                             ['col2', 'col1'])
 
     def test_impute_values(self):
         # Add NaN and impute
         self.handler.df.loc[0, 'col1'] = np.nan
-        self.handler.impute_values('col1')
+        self.handler.impute_values(['col1'])
         self.assertEqual(self.handler.df['col1'].iloc[0], 0)
 
     def test_remove_values(self):
@@ -88,9 +89,35 @@ class TestHandler(unittest.TestCase):
 
     def test_replace_values(self):
         # Replace 1 with 99 and 2 with 100
-        self.handler.replace_values([{'col1': {1: 99}}, {'col2': {2: 100}}])
+        self.handler.replace_values({'col1': {1: 99}, 'col2': {2: 100}})
         self.assertEqual(self.handler.df['col1'].iloc[0], 99)
         self.assertEqual(self.handler.df['col2'].iloc[0], 100)
+
+    def test_translate_str_simple_input_success(self):
+        values = {
+            'str_col': ['He-/llo', 'W;o]r[l+d']
+        }
+
+        self.handler.df = pd.DataFrame(values)
+
+        self.handler.translate_str({'str_col': '-/;][+'})
+
+        expected = pd.DataFrame({'str_col': ['Hello', 'World']})
+        pd.testing.assert_series_equal(expected['str_col'],
+                                       self.handler.df['str_col'])
+
+    def test_translate_str_nested_input_success(self):
+        values = {
+            'str_col': ['12330', 'Wor36']
+        }
+
+        self.handler.df = pd.DataFrame(values)
+
+        self.handler.translate_str({'str_col': {'12306': 'Helod'}})
+
+        expected = pd.DataFrame({'str_col': ['Hello', 'World']})
+        pd.testing.assert_series_equal(expected['str_col'],
+                                       self.handler.df['str_col'])
 
     def test_change_dtype_success(self):
         self.handler.change_dtype({'col1': 'float'})

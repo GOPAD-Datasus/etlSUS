@@ -23,7 +23,7 @@ class TestLoad(unittest.TestCase):
         load('test_table', if_exists='append')
 
         mock_get_files.assert_called_with('/processed',
-                                          endswith='.parquet')
+                                          endswith='.parquet.gzip')
         self.assertEqual(mock_read_parquet.call_count, 2)
         self.assertEqual(mock_insert.call_count, 2)
         mock_engine.connect.assert_called_once()

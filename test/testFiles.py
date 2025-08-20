@@ -3,10 +3,11 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
-import files
+from etlsus import files
 
 
 class TestFiles(unittest.TestCase):
+    module = 'etlsus.files'
 
     def setUp(self):
         self.test_dir = tempfile.TemporaryDirectory()
@@ -26,8 +27,8 @@ class TestFiles(unittest.TestCase):
         self.assertTrue(files.check_file_exists(str(test_file)))
         self.assertFalse(files.check_file_exists(str(non_existent)))
 
-    @patch('files.config.PROCESSED_DIR', '/processed/')
-    @patch('files.check_file_exists')
+    @patch(f'{module}.config.PROCESSED_DIR', '/processed/')
+    @patch(f'{module}.check_file_exists')
     def test_check_if_processed(self, mock_check_file):
         mock_check_file.return_value = True
         raw_path = "/raw/data.txt"
@@ -54,7 +55,7 @@ class TestFiles(unittest.TestCase):
         expected = [str(file1), str(file2)]
         self.assertCountEqual(result, expected)
 
-    @patch('files.config.INPUT_DIR', '/input/')
+    @patch(f'{module}.config.INPUT_DIR', '/input/')
     def test_get_config_file_found(self):
 
         with patch('os.walk') as mock_walk:
@@ -65,7 +66,7 @@ class TestFiles(unittest.TestCase):
             self.assertEqual(result,
                              Path('/input/subdir/data.yaml').resolve())
 
-    @patch('files.config.INPUT_DIR', '/input/')
+    @patch(f'{module}.config.INPUT_DIR', '/input/')
     def test_get_config_file_not_found(self):
         with patch('os.walk') as mock_walk:
             mock_walk.return_value = [
@@ -74,7 +75,7 @@ class TestFiles(unittest.TestCase):
             result = files.get_config_file('/raw/data.csv')
             self.assertIsNone(result)
 
-    @patch('files.config.INPUT_DIR', '/input/')
+    @patch(f'{module}.config.INPUT_DIR', '/input/')
     def test_get_config_file_multiple_dirs(self):
         with patch('os.walk') as mock_walk:
             mock_walk.return_value = [
