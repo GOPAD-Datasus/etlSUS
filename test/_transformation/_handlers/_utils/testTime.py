@@ -31,7 +31,7 @@ class TestTime(unittest.TestCase):
         date_series = time_handler.convert_date(date_series)
         expected = pd.Series(
             pd.to_datetime(['30/02/10', '14/06/10', pd.NaT],
-                           format = format_,
+                           format=format_,
                            errors='coerce')
         )
 

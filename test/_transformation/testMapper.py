@@ -54,11 +54,11 @@ class TestMapper(unittest.TestCase):
 
         def file_data(file, *args):
             if file == '/path/to/config.yaml':
-                return mock_open(read_data= \
-                                     yaml.dump(config_data)).return_value
+                return (mock_open(read_data=yaml.dump(config_data))
+                        .return_value)
             elif file == '/path/generic.yaml':
-                return mock_open(read_data= \
-                                     yaml.dump(generic_data)).return_value
+                return (mock_open(read_data=yaml.dump(generic_data))
+                        .return_value)
             raise FileNotFoundError(file)
 
         mock_open_file.side_effect = file_data
@@ -86,8 +86,8 @@ class TestMapper(unittest.TestCase):
 
         def file_data(file, *args):
             if file == '/path/to/config.yaml':
-                return mock_open(read_data= \
-                                     yaml.dump(config_data)).return_value
+                return (mock_open(read_data=yaml.dump(config_data))
+                        .return_value)
             raise FileNotFoundError(file)
 
         mock_open_file.side_effect = file_data
