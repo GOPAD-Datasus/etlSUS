@@ -7,7 +7,7 @@ from etlsus.transformation.handlers.utils.time import TimeHandler
 
 class TestTime(unittest.TestCase):
     def test_get_format_item_length(self):
-        format_ = '%f-%S-%M-%H' # Expected: 15
+        format_ = '%f-%S-%M-%H'  # Expected: 15
         time_handler = TimeHandler(format_)
         self.assertEqual(15, time_handler._get_format_item_length())
 
@@ -36,6 +36,7 @@ class TestTime(unittest.TestCase):
         )
 
         pd.testing.assert_series_equal(date_series, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

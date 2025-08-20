@@ -9,7 +9,6 @@ class TestUtils(unittest.TestCase):
     @patch('builtins.open')
     @patch('etlsus.extraction.utils.yaml.safe_load')
     def test_get_yaml_urls_correct(self, mock_safe_load, _):
-        
         mock_safe_load.return_value = (
             {
                 'files':  {1: 'abc', 2: 'foo', 3: 'bar'},

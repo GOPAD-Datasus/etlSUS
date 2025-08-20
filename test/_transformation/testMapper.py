@@ -114,5 +114,6 @@ class TestMapper(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             transform_file('raw_file.txt')
 
+
 if __name__ == '__main__':
     unittest.main()

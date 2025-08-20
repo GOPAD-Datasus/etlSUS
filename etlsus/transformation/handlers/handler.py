@@ -228,9 +228,9 @@ class Handler:
             self.df[time] = self.df[time].fillna(zero_hour)
 
             self.df[date] = pd.to_datetime({
-                'year'  : self.df[date].dt.year,
-                'month' : self.df[date].dt.month,
-                'day'   : self.df[date].dt.day,
-                'hour'  : self.df[time].dt.hour,
+                'year': self.df[date].dt.year,
+                'month': self.df[date].dt.month,
+                'day': self.df[date].dt.day,
+                'hour': self.df[time].dt.hour,
                 'minute': self.df[time].dt.minute
             })

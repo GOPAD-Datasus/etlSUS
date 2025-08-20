@@ -13,6 +13,7 @@ else:
     msg = f'Unable to find .env at {env_path}'
     warnings.warn(msg)
 
+
 def create_base_dir() -> Path:
     if 'base_dir' in os.environ:
         return Path(os.environ['base_dir']).resolve()
