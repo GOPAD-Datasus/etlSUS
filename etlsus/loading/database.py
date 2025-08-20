@@ -26,10 +26,10 @@ def create_db_engine() -> Engine:
     )
 
 
-def insert_into_db (conn: Connection,
-                    df: pd.DataFrame,
-                    table_name: str,
-                    **kwargs) -> None:
+def insert_into_db(conn: Connection,
+                   df: pd.DataFrame,
+                   table_name: str,
+                   **kwargs) -> None:
     """
     Insert data into the database. Can be configured with
     additional parameters using kwargs

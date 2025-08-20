@@ -3,7 +3,7 @@ from typing import Tuple
 import yaml
 
 
-def get_yaml_urls (input_file_url: str) -> Tuple[dict, str]:
+def get_yaml_urls(input_file_url: str) -> Tuple[dict, str]:
     """
     Load information inside input.yaml
 
@@ -15,7 +15,7 @@ def get_yaml_urls (input_file_url: str) -> Tuple[dict, str]:
         RuntimeError: If .yaml isn't found or has incorrect structure
     """
     try:
-        with open (input_file_url) as f:
+        with open(input_file_url) as f:
             loaded_yaml = yaml.safe_load(f)
 
             try:
