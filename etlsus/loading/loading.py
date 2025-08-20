@@ -33,11 +33,6 @@ def load(table_name: str, verbose: bool = False, **kwargs) -> None:
     try:
         file_list = get_files_from_dir(config.PROCESSED_DIR,
                                        endswith='.parquet.gzip')
-        if not file_list:
-            msg = (f'No parquet files found in processed directory: '
-                   f'{config.PROCESSED_DIR}')
-            warnings.warn(msg)
-            return
     except Exception as e:
         raise RuntimeError(f'Failed to load file list: {str(e)}') from e
 

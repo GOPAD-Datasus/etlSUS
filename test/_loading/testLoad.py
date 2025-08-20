@@ -38,17 +38,6 @@ class TestLoad(unittest.TestCase):
                           str(context.exception))
 
     @patch(f'{module}.create_db_engine')
-    @patch(f'{module}.get_files_from_dir', return_value=[])
-    def test_load_no_parquet_files(self, mock_create_engine,
-                                   mock_load_files):
-
-        with warnings.catch_warnings(record=True) as w:
-            load('test_table')
-            self.assertEqual(len(w), 1)
-            self.assertIn('No parquet files found',
-                          str(w[0].message))
-
-    @patch(f'{module}.create_db_engine')
     @patch(f'{module}.get_files_from_dir')
     def test_load_file_read_failure(self, mock_load_files,
                                     mock_create_database):

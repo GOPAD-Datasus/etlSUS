@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import os
+import warnings
 from pathlib import Path
-from typing import List, Callable, Union
+from typing import List, Union
 
 import config
 
@@ -56,9 +57,16 @@ def get_files_from_dir(folder_dir: str, endswith: str) -> List[str]:
         OSError: If the directory doesn't exist or has permission issues
         FileNotFoundError: If the specified directory cannot be found
     """
-    return [os.path.join(folder_dir, f)
-            for f in os.listdir(folder_dir)
-            if f.endswith(endswith)]
+    list_ = [os.path.join(folder_dir, f)
+             for f in os.listdir(folder_dir)
+             if f.endswith(endswith)]
+
+    if not list_:
+        msg = (f'No parquet files found in processed directory: '
+               f'{config.PROCESSED_DIR}')
+        warnings.warn(msg)
+
+    return list_
 
 
 def get_config_file(raw_file_path: str | Path) -> Union[Path, None]:

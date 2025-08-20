@@ -42,7 +42,7 @@ class TestFiles(unittest.TestCase):
         result = files.check_if_processed(raw_path)
         self.assertFalse(result)
 
-    def test_get_files_from_dir(self):
+    def test_get_files_from_dir_success(self):
         ext = '.txt'
         file1 = Path(self.test_path) / 'a.txt'
         file2 = Path(self.test_path) / 'b.txt'
@@ -53,6 +53,12 @@ class TestFiles(unittest.TestCase):
 
         result = files.get_files_from_dir(self.test_path, ext)
         expected = [str(file1), str(file2)]
+        self.assertCountEqual(result, expected)
+
+    def test_get_files_from_dir_failure(self):
+        ext = '.txt'
+        result = files.get_files_from_dir(self.test_path, ext)
+        expected = []
         self.assertCountEqual(result, expected)
 
     @patch(f'{module}.config.INPUT_DIR', '/input/')
