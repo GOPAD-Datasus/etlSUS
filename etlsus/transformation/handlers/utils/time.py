@@ -34,6 +34,9 @@ class TimeHandler:
         return length
 
     def _correct_length(self, date_str: str):
+        if not isinstance(date_str, str):
+            return date_str
+
         format_length = self._get_format_item_length()
         if len(date_str) == format_length:
             return date_str
@@ -44,8 +47,15 @@ class TimeHandler:
 
     def convert_date(self, series: pd.Series):
         """
-        Standardizes columns related to dates and time by
-        converting to datetime.
+        Converts a pandas Series to datetime format using specified format.
+
+        param:
+            series (pd.Series): Series containing date/time strings to convert
+        returns:
+            pd.Series: Series converted to datetime format
+        raises:
+            ValueError: If datetime conversion fails for the entire series
+            Warning: If individual values cannot be converted (set to NaT)
         """
         return pd.to_datetime(series.apply(self._correct_length),
                               format=self.format,

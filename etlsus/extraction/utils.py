@@ -10,8 +10,9 @@ def get_yaml_urls (input_file_url: str) -> Tuple[dict, str]:
     param:
         input_file_url (str): path to the input file
     returns:
-        tuple: Dict of urls for download,
-               prefix for file naming
+        tuple: Dict of urls for download, prefix for file naming
+    raises:
+        RuntimeError: If .yaml isn't found or has incorrect structure
     """
     try:
         with open (input_file_url) as f:

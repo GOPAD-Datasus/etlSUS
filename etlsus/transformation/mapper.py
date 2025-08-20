@@ -7,6 +7,20 @@ from etlsus.files import get_config_file
 
 
 def apply_transformations(transformations_input: dict, handler):
+    """
+    Applies a series of transformations to a dataframe using handler methods.
+
+    param:
+        transformations_input (dict): Dictionary where keys are method
+                                      names and values are arguments
+                                      for those methods
+        handler (Handler): Handler object containing transformation methods
+    returns:
+        None: This function modifies the handler object in place
+    raises:
+        Warning: If method names are incorrect or transformations cannot
+                 be applied
+    """
     for method_name, method_args in transformations_input.items():
         method = getattr(handler, method_name,
                          f'Incorrect method name: {method_name}')
@@ -14,17 +28,35 @@ def apply_transformations(transformations_input: dict, handler):
         if type(method) == str:
             warnings.warn(method)
         else:
-            method(method_args)
+            if method == handler.optimize_dtype:
+                method()
+            else:
+                method(method_args)
 
 
 def transform_file(raw_file: str, generic_path: str = None) -> None:
+    """
+    Transforms a CSV file based on YAML configuration and optional
+    generic transformations.
+
+    param:
+        raw_file (str): Path to the raw CSV file to be transformed
+        generic_path (str, optional): Path to generic YAML file with
+                                      additional transformations
+    returns:
+        None: Saves the transformed file to processed directory
+    raises:
+        RuntimeError: If YAML file is not found or has incorrect structure
+        KeyError: If required keys are missing in the configuration
+        Warning: If transformations cannot be applied correctly
+    """
     config_file_path = get_config_file(raw_file)
 
     try:
         with open(config_file_path) as f:
             info = yaml.safe_load(f)
-    except FileNotFoundError:
-        error_msg = f'File path {config_file_path} incorrect'
+    except (TypeError, FileNotFoundError):
+        error_msg = f'No yaml file found for {raw_file}'
         raise RuntimeError(error_msg)
     except yaml.YAMLError:
         error_msg = f'Incorrect Yaml structure in {config_file_path}'
