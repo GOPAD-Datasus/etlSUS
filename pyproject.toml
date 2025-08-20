@@ -1,6 +1,6 @@
 [project]
 name = "etlsus"
-version = "0.2.0"
+version = "1.0.0"
 description = ""
 authors = [
     {name = "morsoletodev",email = "106322393+morsoletodev@users.noreply.github.com"}
