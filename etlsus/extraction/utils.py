@@ -21,15 +21,13 @@ def get_yaml_urls(input_file_url: str) -> Tuple[dict, str]:
             try:
                 prefix = loaded_yaml['prefix']
             except KeyError:
-                error_msg = (f'Missing prefix value'
-                             f' inside yaml')
+                error_msg = 'Missing prefix value inside yaml'
                 raise RuntimeError(error_msg)
 
             try:
                 files = loaded_yaml['files']
             except KeyError:
-                error_msg = (f'Missing files section'
-                             f' inside yaml')
+                error_msg = 'Missing files section inside yaml'
                 raise RuntimeError(error_msg)
 
             return files, prefix

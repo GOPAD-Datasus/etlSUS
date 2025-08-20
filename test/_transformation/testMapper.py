@@ -22,7 +22,7 @@ class TestMapper(unittest.TestCase):
 
         mock_handler.add_cols.assert_called_with(['foo', 'bar'])
 
-    @patch(f'etlsus.transformation.handlers.handler.pd.read_csv',
+    @patch('etlsus.transformation.handlers.handler.pd.read_csv',
            return_value=MagicMock())
     def test_apply_transformations_incorrect_method(self, mock_read):
         incorrect_transformations = {
