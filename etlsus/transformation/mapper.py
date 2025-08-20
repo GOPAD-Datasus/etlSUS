@@ -25,7 +25,7 @@ def apply_transformations(transformations_input: dict, handler):
         method = getattr(handler, method_name,
                          f'Incorrect method name: {method_name}')
 
-        if type(method) == str:
+        if type(method) is str:
             warnings.warn(method)
         else:
             if method == handler.optimize_dtype:

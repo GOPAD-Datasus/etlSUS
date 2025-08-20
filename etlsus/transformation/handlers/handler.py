@@ -40,9 +40,9 @@ class Handler:
         raises:
             ValueError: If target is not a string or list of strings
         """
-        if type(target) == str:
+        if type(target) is str:
             self.df[target] = np.nan
-        if type(target) == list:
+        if type(target) is list:
             for i in target:
                 self.df[i] = np.nan
 
