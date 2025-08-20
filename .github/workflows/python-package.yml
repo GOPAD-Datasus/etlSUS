@@ -44,7 +44,7 @@ jobs:
   
     - name: Test with unittest
       run: |
-        python -m unittest discover -s test -p "test*.py"
+        poetry run python -m unittest discover -s test -p "test*.py"
 
     - name: Cache Poetry virtualenv
       uses: actions/cache@v3
