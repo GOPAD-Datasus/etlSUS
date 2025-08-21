@@ -4,8 +4,7 @@
 ![Python](https://img.shields.io/badge/python-3.9_|_3.10_|_3.11_|_3.12-blue.svg)
 [![Python package](https://github.com/GOPAD-Datasus/ETL-DataSUS/actions/workflows/python-package.yml/badge.svg)](https://github.com/GOPAD-Datasus/ETL-DataSUS/actions/workflows/python-package.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-
----
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16916158.svg)](https://doi.org/10.5281/zenodo.16916158)
 
 A streamlined ETL (Extract, Transform, Load) pipeline designed to process Brazil's public healthcare data (DataSUS) from raw CSV files into analysis-ready datasets, using simple YAML files for configuration.
 
