@@ -1,5 +1,6 @@
 import unittest
 import tempfile
+import warnings
 from pathlib import Path
 from unittest.mock import patch
 
@@ -57,9 +58,13 @@ class TestFiles(unittest.TestCase):
 
     def test_get_files_from_dir_failure(self):
         ext = '.txt'
-        result = files.get_files_from_dir(self.test_path, ext)
-        expected = []
-        self.assertCountEqual(result, expected)
+
+        with warnings.catch_warnings(record=True) as w:
+            result = files.get_files_from_dir(self.test_path, ext)
+            expected = []
+
+            self.assertCountEqual(result, expected)
+            self.assertEqual(1, len(w))
 
     @patch(f'{module}.config.INPUT_DIR', '/input/')
     def test_get_config_file_found(self):
