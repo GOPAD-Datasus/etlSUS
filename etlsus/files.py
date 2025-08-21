@@ -5,7 +5,7 @@ import warnings
 from pathlib import Path
 from typing import List, Union
 
-import config
+from etlsus import config
 
 
 def check_file_exists(file_path: str | Path) -> bool:

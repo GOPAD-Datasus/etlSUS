@@ -5,7 +5,7 @@ from typing import Union, List, Dict
 import pandas as pd
 import numpy as np
 
-import config
+from etlsus import config
 from .utils.time import TimeHandler
 
 

@@ -2,7 +2,7 @@ import os
 import warnings
 from urllib.request import urlretrieve
 
-import config
+from etlsus import config
 from .utils import get_yaml_urls
 from etlsus.files import check_file_exists
 

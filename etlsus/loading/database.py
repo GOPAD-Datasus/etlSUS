@@ -2,7 +2,7 @@ import pandas as pd
 from sqlalchemy.engine import Engine, Connection
 from sqlalchemy import create_engine
 
-from config import get_database_config
+from etlsus.config import get_database_config
 
 
 def create_db_engine() -> Engine:

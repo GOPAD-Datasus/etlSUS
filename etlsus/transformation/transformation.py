@@ -1,7 +1,7 @@
 from .mapper import transform_file
 from etlsus.files import check_if_processed, get_files_from_dir
 
-import config
+from etlsus import config
 
 
 def transform(generic_yaml_file: str = None, verbose: bool = False) -> None:

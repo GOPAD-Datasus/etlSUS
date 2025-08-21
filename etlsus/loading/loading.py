@@ -2,7 +2,7 @@ import warnings
 
 import pandas as pd
 
-import config
+from etlsus import config
 from .database import create_db_engine, insert_into_db
 from etlsus.files import get_files_from_dir
 
