@@ -30,13 +30,15 @@ Copy `.env-example` to `.env` and set your directories and database connection:
 
 ```bash
 # .env
-INPUT_DIR=./input   # Where to find your YAML configs
-BASE_DIR=./data     # Where to store raw/processed files
+input_dir = './input'   # Where to find your YAML configs
+base_dir = './data'     # Where to store raw/processed files
 
-DB_HOST=localhost
-DB_NAME=datasus
-DB_USER=postgres
-DB_PASSWORD=your_password
+host = 'localhost'
+port = 12345
+db = 'name'
+
+user = 'postgres'
+password = '*****'
 ```
 
 ### 3. Create Configuration Files
