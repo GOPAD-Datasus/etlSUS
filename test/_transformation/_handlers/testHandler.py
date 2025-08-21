@@ -35,7 +35,7 @@ class TestHandler(unittest.TestCase):
                              ['col1', 'col2', 'col3'])
 
     def test_save(self):
-        with patch('config.PROCESSED_DIR', self.test_dir):
+        with patch('etlsus.config.PROCESSED_DIR', self.test_dir):
             self.handler.save('test_output')
             output_path = Path(self.test_dir + '/test_output.parquet.gzip')
             # Check if file exists

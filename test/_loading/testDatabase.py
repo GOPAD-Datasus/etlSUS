@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 from sqlalchemy import Engine
 
 from etlsus.loading.database import create_db_engine, insert_into_db
-from config import get_database_config
+from etlsus.config import get_database_config
 
 
 class TestDatabase(unittest.TestCase):
