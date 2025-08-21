@@ -28,6 +28,24 @@ class TestLoad(unittest.TestCase):
         self.assertEqual(mock_insert.call_count, 2)
         mock_engine.connect.assert_called_once()
 
+    @patch(f'{module}.insert_into_db')
+    @patch(f'{module}.pd.read_parquet', return_value=MagicMock())
+    @patch(f'{module}.get_files_from_dir',
+           return_value=["file1.parquet", "file2.parquet"])
+    @patch(f'{module}.create_db_engine')
+    @patch(f'{module}.config.PROCESSED_DIR', '/processed')
+    def test_load_with_custom(self, mock_create_engine, mock_get_files,
+                          mock_read_parquet, mock_insert):
+        mock_engine = MagicMock()
+        mock_create_engine.return_value = mock_engine
+
+        load('test_table', custom_dir='/custom')
+
+        mock_get_files.assert_called_with('/custom', endswith='.parquet.gzip')
+        self.assertEqual(mock_read_parquet.call_count, 2)
+        self.assertEqual(mock_insert.call_count, 2)
+        mock_engine.connect.assert_called_once()
+
     @patch(f'{module}.create_db_engine')
     def test_load_engine_failure(self, mock_create_engine):
         mock_create_engine.side_effect = AttributeError('Missing user info')

@@ -7,7 +7,12 @@ from .database import create_db_engine, insert_into_db
 from etlsus.files import get_files_from_dir
 
 
-def load(table_name: str, verbose: bool = False, **kwargs) -> None:
+def load(
+        table_name: str,
+        verbose: bool = False,
+        custom_dir: str = None,
+        **kwargs
+) -> None:
     """
     Main load function. Inserts every processed files into
     the select database
@@ -15,6 +20,7 @@ def load(table_name: str, verbose: bool = False, **kwargs) -> None:
     param:
         table_name (str): Name of the table inside the db
         verbose (bool): Whether to print the full summary of execution
+        custom_dir (str): (Optional) Custom directory to look for files
         kwargs: Additional parameters for to_sql method.
             For more information about said parameters visit:
             https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html
@@ -30,9 +36,13 @@ def load(table_name: str, verbose: bool = False, **kwargs) -> None:
         raise RuntimeError(f'Failed to create database'
                            f' engine: {str(e)}') from e
 
+    if custom_dir:
+        where_files = custom_dir
+    else:
+        where_files = config.PROCESSED_DIR
+
     try:
-        file_list = get_files_from_dir(config.PROCESSED_DIR,
-                                       endswith='.parquet.gzip')
+        file_list = get_files_from_dir(where_files, endswith='.parquet.gzip')
     except Exception as e:
         raise RuntimeError(f'Failed to load file list: {str(e)}') from e
 
