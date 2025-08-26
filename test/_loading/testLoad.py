@@ -35,7 +35,7 @@ class TestLoad(unittest.TestCase):
     @patch(f'{module}.create_db_engine')
     @patch(f'{module}.config.PROCESSED_DIR', '/processed')
     def test_load_with_custom(self, mock_create_engine, mock_get_files,
-                          mock_read_parquet, mock_insert):
+                              mock_read_parquet, mock_insert):
         mock_engine = MagicMock()
         mock_create_engine.return_value = mock_engine
 

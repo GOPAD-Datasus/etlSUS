@@ -76,7 +76,7 @@ def get_config_file(raw_file_path: str | Path) -> Union[Path, None]:
     param:
         raw_file_path (str | Path): Path to the raw file
     returns:
-        Union[Path, None]: Path to the configuration file if found, None otherwise
+        Path | None: Path to the configuration file if found. None otherwise
     raises:
         OSError: If there are permission issues accessing the file system
         ValueError: If the raw file path is malformed
