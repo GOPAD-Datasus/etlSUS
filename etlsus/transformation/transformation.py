@@ -23,7 +23,7 @@ def transform(generic_yaml_file: str = None, verbose: bool = False) -> None:
     """
     raw_folder = config.RAW_DIR
     processed_folder = config.PROCESSED_DIR
-    final_extension = '.parquet'
+    final_extension = '.parquet.gzip'
 
     raw_files = get_files_from_dir(raw_folder, '.csv')
 
