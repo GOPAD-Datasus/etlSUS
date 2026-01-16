@@ -37,7 +37,7 @@ def apply_transformations(transformations_input: dict, handler):
                 method(method_args)
 
 
-def transform_file(raw_file: str | Path, generic_path: str = None) -> None:
+def transform_file(raw_file: str, generic_path: str = None) -> None:
     """
     Transforms a CSV file based on YAML configuration and optional
     generic transformations.
