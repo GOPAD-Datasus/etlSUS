@@ -42,7 +42,7 @@ def load(
         where_files = config.PROCESSED_DIR
 
     try:
-        file_list = get_files_from_dir(where_files, endswith='.parquet.gzip')
+        file_list = get_files_from_dir(where_files, extension='.parquet.gzip')
     except Exception as e:
         raise RuntimeError(f'Failed to load file list: {str(e)}') from e
 

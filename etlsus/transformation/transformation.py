@@ -1,5 +1,7 @@
+from pathlib import Path
+
 from .mapper import transform_file
-from etlsus.files import check_if_processed, get_files_from_dir
+from etlsus.files import get_files_from_dir, file_exists
 
 from etlsus import config
 
@@ -20,10 +22,16 @@ def transform(generic_yaml_file: str = None, verbose: bool = False) -> None:
         Warning: If individual file transformations encounter issues
     """
     raw_folder = config.RAW_DIR
+    processed_folder = config.PROCESSED_DIR
+    final_extension = '.parquet'
+
     raw_files = get_files_from_dir(raw_folder, '.csv')
 
     for raw_file in raw_files:
-        if not check_if_processed(raw_file):
+        processed_file = (processed_folder
+                          / Path(raw_file).with_suffix(final_extension).name)
+
+        if not file_exists(processed_file):
 
             if verbose:
                 print(f'Transforming file: {raw_file}')

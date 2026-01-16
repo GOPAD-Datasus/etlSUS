@@ -4,7 +4,7 @@ from urllib.request import urlretrieve
 
 from etlsus import config
 from .utils import get_yaml_urls
-from etlsus.files import check_file_exists
+from etlsus.files import file_exists
 
 
 def extract(input_file_url: str, verbose: bool = False) -> None:
@@ -28,7 +28,7 @@ def extract(input_file_url: str, verbose: bool = False) -> None:
         output_file = os.path.join(raw_folder,
                                    f'{prefix}{year}{extension}')
 
-        if not check_file_exists(output_file):
+        if not file_exists(output_file):
             if verbose:
                 print(f'Downloading: {source_link}\n'
                       f' ↳ Saving at: {output_file}')

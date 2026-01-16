@@ -1,91 +1,26 @@
 from __future__ import annotations
 
-import os
-import warnings
 from pathlib import Path
-from typing import List, Union
-
-from etlsus import config
+from typing import List
 
 
-def check_file_exists(file_path: str | Path) -> bool:
+def file_exists(file_path: str | Path) -> bool:
+    """Checks if a file exists at the specified path."""
+    return Path(file_path).exists()
+
+
+def get_files_from_dir(folder_dir: str, extension: str) -> List[Path]:
     """
-    Checks if a file exists at the specified path.
+    Retrieves all files from a directory with matching extension.
 
     param:
-        file_path (str | Path): Path to the file to check
+        folder_dir (str): Directory path to search
+        extension (str): Expected file extension (e.g., 'csv', '.yaml')
     returns:
-        bool: True if file exists, False otherwise
-    raises:
-        OSError: If there are permission issues accessing the file system
+        List[Path]: Full file paths matching the criteria
     """
-    return os.path.isfile(file_path)
+    path = Path(folder_dir).resolve()
 
+    files = [file for file in path.glob(f'**/*{extension}')]
 
-def check_if_processed(raw_file_path: str | Path) -> bool:
-    """
-    Checks if a raw file has already been processed by looking
-    for corresponding parquet file.
-
-    param:
-        raw_file_path (str | Path): Path to the raw file to check
-    returns:
-        bool: True if processed file exists, False otherwise
-    raises:
-        OSError: If there are permission issues accessing the file system
-        ValueError: If the raw file path is malformed
-    """
-    file_name, _ = os.path.basename(raw_file_path).split('.')
-
-    extension = '.parquet.gzip'
-    file = Path(str(config.PROCESSED_DIR) +
-                f'/{file_name}{extension}').resolve()
-
-    return check_file_exists(file)
-
-
-def get_files_from_dir(folder_dir: str, endswith: str) -> List[str]:
-    """
-    Retrieves all files from a directory that match the specified extension.
-
-    param:
-        folder_dir (str): Directory path to search for files
-        endswith (str): File extension to filter by (e.g., '.csv', '.yaml')
-    returns:
-        List[str]: List of full file paths matching the criteria
-    raises:
-        OSError: If the directory doesn't exist or has permission issues
-        FileNotFoundError: If the specified directory cannot be found
-    """
-    list_ = [os.path.join(folder_dir, f)
-             for f in os.listdir(folder_dir)
-             if f.endswith(endswith)]
-
-    if not list_:
-        msg = (f'No parquet files found in processed directory: '
-               f'{config.PROCESSED_DIR}')
-        warnings.warn(msg)
-
-    return list_
-
-
-def get_config_file(raw_file_path: str | Path) -> Union[Path, None]:
-    """
-    Finds the corresponding YAML configuration file for a given raw file.
-
-    param:
-        raw_file_path (str | Path): Path to the raw file
-    returns:
-        Path | None: Path to the configuration file if found. None otherwise
-    raises:
-        OSError: If there are permission issues accessing the file system
-        ValueError: If the raw file path is malformed
-    """
-    file_name, _ = os.path.basename(raw_file_path).split('.')
-    file_name += '.yaml'
-
-    input_dir = config.INPUT_DIR
-
-    for root, dirs, files in os.walk(input_dir):
-        if file_name in files:
-            return Path(os.path.join(root, file_name)).resolve()
+    return files

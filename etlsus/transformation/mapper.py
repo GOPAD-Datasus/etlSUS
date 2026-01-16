@@ -1,9 +1,12 @@
 import warnings
+from pathlib import Path
+from typing import List
 
 import yaml
 
+from etlsus import config
+from etlsus.files import get_files_from_dir
 from .handlers import Handler
-from etlsus.files import get_config_file
 
 
 def apply_transformations(transformations_input: dict, handler):
@@ -34,7 +37,7 @@ def apply_transformations(transformations_input: dict, handler):
                 method(method_args)
 
 
-def transform_file(raw_file: str, generic_path: str = None) -> None:
+def transform_file(raw_file: str | Path, generic_path: str = None) -> None:
     """
     Transforms a CSV file based on YAML configuration and optional
     generic transformations.
@@ -50,16 +53,21 @@ def transform_file(raw_file: str, generic_path: str = None) -> None:
         KeyError: If required keys are missing in the configuration
         Warning: If transformations cannot be applied correctly
     """
-    config_file_path = get_config_file(raw_file)
+
+    config_file = get_files_from_dir(config.INPUT_DIR,
+                                     Path(raw_file).with_suffix('.yaml').name)
+
+    if isinstance(config_file, List):
+        config_file = config_file[0]
 
     try:
-        with open(config_file_path) as f:
+        with open(config_file) as f:
             info = yaml.safe_load(f)
     except (TypeError, FileNotFoundError):
         error_msg = f'No yaml file found for {raw_file}'
         raise RuntimeError(error_msg)
     except yaml.YAMLError:
-        error_msg = f'Incorrect Yaml structure in {config_file_path}'
+        error_msg = f'Incorrect Yaml structure in {config_file}'
         raise RuntimeError(error_msg)
 
     required_keys = {'read_variables', 'transformations', 'name'}
