@@ -1,8 +1,6 @@
 import unittest
 import tempfile
-import warnings
 from pathlib import Path
-from unittest.mock import patch
 
 from etlsus import files
 
@@ -17,85 +15,40 @@ class TestFiles(unittest.TestCase):
     def tearDown(self):
         self.test_dir.cleanup()
 
-    def test_check_file_exists(self):
-        test_file = Path(self.test_path) / 'test.txt'
+    def test_file_exists_success(self):
+        test_file = Path(self.test_path) / 'test_file.txt'
         test_file.touch()
-        self.assertTrue(files.check_file_exists(test_file))
+        self.assertTrue(files.file_exists(test_file))
+        self.assertTrue(files.file_exists(str(test_file)))
 
-        non_existent = Path(self.test_path) / 'none.txt'
-        self.assertFalse(files.check_file_exists(non_existent))
-
-        self.assertTrue(files.check_file_exists(str(test_file)))
-        self.assertFalse(files.check_file_exists(str(non_existent)))
-
-    @patch(f'{module}.config.PROCESSED_DIR', '/processed/')
-    @patch(f'{module}.check_file_exists')
-    def test_check_if_processed(self, mock_check_file):
-        mock_check_file.return_value = True
-        raw_path = "/raw/data.txt"
-        result = files.check_if_processed(raw_path)
-        self.assertTrue(result)
-
-        expected_path = Path('/processed/data.parquet.gzip').resolve()
-        mock_check_file.assert_called_with(expected_path)
-
-        mock_check_file.return_value = False
-        result = files.check_if_processed(raw_path)
-        self.assertFalse(result)
+    def test_file_exists_failure(self):
+        non_existent = Path(self.test_path) / 'test_file.txt'
+        self.assertFalse(files.file_exists(non_existent))
+        self.assertFalse(files.file_exists(str(non_existent)))
 
     def test_get_files_from_dir_success(self):
         ext = '.txt'
+        folder = Path(self.test_path) / 'folder'
+        folder.mkdir()
+
         file1 = Path(self.test_path) / 'a.txt'
-        file2 = Path(self.test_path) / 'b.txt'
+        file2 = Path(self.test_path) / 'folder' / 'b.txt'
         file3 = Path(self.test_path) / 'c.log'
         file1.touch()
         file2.touch()
         file3.touch()
 
         result = files.get_files_from_dir(self.test_path, ext)
-        expected = [str(file1), str(file2)]
-        self.assertCountEqual(result, expected)
+        expected = [file1, file2]
+        self.assertEqual(result, expected)
 
     def test_get_files_from_dir_failure(self):
         ext = '.txt'
 
-        with warnings.catch_warnings(record=True) as w:
-            result = files.get_files_from_dir(self.test_path, ext)
-            expected = []
+        result = files.get_files_from_dir(self.test_path, ext)
+        expected = []
 
-            self.assertCountEqual(result, expected)
-            self.assertEqual(1, len(w))
-
-    @patch(f'{module}.config.INPUT_DIR', '/input/')
-    def test_get_config_file_found(self):
-
-        with patch('os.walk') as mock_walk:
-            mock_walk.return_value = [
-                ('/input/subdir', [], ['data.yaml']),
-            ]
-            result = files.get_config_file('/raw/data.csv')
-            self.assertEqual(result,
-                             Path('/input/subdir/data.yaml').resolve())
-
-    @patch(f'{module}.config.INPUT_DIR', '/input/')
-    def test_get_config_file_not_found(self):
-        with patch('os.walk') as mock_walk:
-            mock_walk.return_value = [
-                ('/input/subdir', [], ['other.yaml']),
-            ]
-            result = files.get_config_file('/raw/data.csv')
-            self.assertIsNone(result)
-
-    @patch(f'{module}.config.INPUT_DIR', '/input/')
-    def test_get_config_file_multiple_dirs(self):
-        with patch('os.walk') as mock_walk:
-            mock_walk.return_value = [
-                ('/input/first', [], []),
-                ('/input/second', [], ['data.yaml']),
-            ]
-            result = files.get_config_file('/raw/data.csv')
-            self.assertEqual(result,
-                             Path('/input/second/data.yaml').resolve())
+        self.assertEqual(result, expected)
 
 
 if __name__ == '__main__':

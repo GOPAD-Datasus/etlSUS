@@ -38,13 +38,14 @@ class TestMapper(unittest.TestCase):
             self.assertIn('Incorrect method name',
                           str(w[0].message))
 
-    @patch(f'{module}.get_config_file')
+    @patch(f'{module}.get_files_from_dir', value='/path/to/config.yaml')
     @patch(f'{module}.Handler')
     @patch(f'{module}.apply_transformations')
     @patch('builtins.open', new_callable=mock_open)
     def test_transform_file_success(self, mock_open_file, mock_apply,
-                                    mock_handler, mock_get_config):
-        mock_get_config.return_value = '/path/to/config.yaml'
+                                    mock_handler, mock_get_files):
+        mock_get_files.return_value = '/path/to/config.yaml'
+
         config_data = {
             'read_variables':  {'var1': 'value1'},
             'transformations': [{'add_cols': 'foo'}],
@@ -77,11 +78,11 @@ class TestMapper(unittest.TestCase):
         mock_open_file.assert_any_call('/path/to/config.yaml')
         mock_open_file.assert_any_call('/path/generic.yaml')
 
-    @patch(f'{module}.get_config_file')
+    @patch(f'{module}.get_files_from_dir')
     @patch('builtins.open', new_callable=mock_open)
     def test_transform_file_missing_required_keys(self, mock_open_file,
-                                                  mock_get_config):
-        mock_get_config.return_value = '/path/to/config.yaml'
+                                                  mock_get_files):
+        mock_get_files.return_value = '/path/to/config.yaml'
         config_data = {'name': 'test'}
 
         def file_data(file, *args):
@@ -97,20 +98,20 @@ class TestMapper(unittest.TestCase):
         self.assertIn('Missing required keys in config',
                       str(cm.exception))
 
-    @patch(f'{module}.get_config_file')
+    @patch(f'{module}.get_files_from_dir')
     @patch('builtins.open', new_callable=mock_open,
            read_data='invalid: yaml: :')
-    def test_transform_file_invalid_yaml(self, _, mock_get_config):
-        mock_get_config.return_value = '/path/to/config.yaml'
+    def test_transform_file_invalid_yaml(self, _, mock_get_files):
+        mock_get_files.return_value = '/path/to/config.yaml'
         with self.assertRaises(RuntimeError) as re:
             transform_file('raw_file.txt')
 
         self.assertIn('Incorrect Yaml structure in',
                       str(re.exception))
 
-    @patch(f'{module}.get_config_file')
-    def test_transform_file_invalid_path(self, mock_get_config):
-        mock_get_config.return_value = '/path/to/config.yaml'
+    @patch(f'{module}.get_files_from_dir')
+    def test_transform_file_invalid_path(self, mock_get_files):
+        mock_get_files.return_value = '/path/to/config.yaml'
         with self.assertRaises(RuntimeError):
             transform_file('raw_file.txt')
 

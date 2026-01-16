@@ -10,10 +10,10 @@ class TestTransformation(unittest.TestCase):
     @patch(f'{module}.config.RAW_DIR', '/mock/raw/dir')
     @patch(f'{module}.get_files_from_dir',
            return_value=['raw.csv', 'raw2.csv'])
-    @patch(f'{module}.check_if_processed', return_value=False)
+    @patch(f'{module}.file_exists', return_value=False)
     @patch(f'{module}.transform_file')
     def test_transform_success(self, mock_transform_file,
-                               mock_check, mock_get_files):
+                               mock_file_exists, mock_get_files):
         transform()
 
         self.assertEqual(2, mock_transform_file.call_count)
@@ -21,10 +21,14 @@ class TestTransformation(unittest.TestCase):
 
     @patch(f'{module}.config.RAW_DIR', '/mock/raw/dir')
     @patch(f'{module}.get_files_from_dir', return_value=[])
-    @patch(f'{module}.check_if_processed', return_value=False)
+    @patch(f'{module}.file_exists', return_value=False)
     @patch(f'{module}.transform_file')
     def test_transform_no_files(self, mock_transform_file,
                                 mock_check, mock_get_files):
         transform()
 
         self.assertEqual(0, mock_transform_file.call_count)
+
+
+if __name__ == '__main__':
+    unittest.main()
