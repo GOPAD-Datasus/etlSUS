@@ -1,46 +1,34 @@
-import os
 import warnings
+from pathlib import Path
 from urllib.request import urlretrieve
 
 from etlsus import config
-from .utils import get_yaml_urls
 from etlsus.files import file_exists
 
 
-def extract(input_file_url: str, verbose: bool = False) -> None:
+def extract(dataset: dict, verbose: bool = False) -> None:
     """
     Main extraction function. Downloads from every url
     inside the files key from input.yaml file.
 
     param:
-        input_file_url (str): Path to the yaml file
+        dataset (Dict): URL to files and Prefix for files
         verbose (bool): Whether to print the full summary of execution
     raises:
         Warning: If urlretrieve fails to download a file
     """
-    raw_folder = config.RAW_DIR
-    extension = '.csv'
+    for year, file in dataset['files'].items():
+        file_name = Path(f'{dataset['prefix']}{year}{Path(file).suffix}')
+        output_path = Path(config.RAW_DIR) / file_name
 
-    files, prefix = get_yaml_urls(input_file_url)
-
-    for year in files.keys():
-        source_link = files[year]
-        output_file = os.path.join(raw_folder,
-                                   f'{prefix}{year}{extension}')
-
-        if not file_exists(output_file):
+        if not file_exists(output_path):
             if verbose:
-                print(f'Downloading: {source_link}\n'
-                      f' ↳ Saving at: {output_file}')
-
+                print(f'Downloading year: {year}\n'
+                      f' ↳ Saving at: {output_path}')
             try:
-                urlretrieve(source_link,
-                            output_file)
+                urlretrieve(file, output_path)
             except Exception as e:
-                error_msg = (
-                    f'Failed to download {year}: {e}\n'
-                    f'Please verify the url in input.yaml'
-                )
+                error_msg = f'Failed to download {year}: {e}\n'
                 warnings.warn(error_msg)
 
     if verbose:
