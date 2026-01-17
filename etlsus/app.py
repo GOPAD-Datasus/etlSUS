@@ -4,6 +4,7 @@ from hydra import compose, initialize
 
 from etlsus import extract, transform, load
 
+
 def pipeline(
         dataset: Union[Literal['SINASC', 'SIM'], List[str]],
         generic_yaml_file: str,
