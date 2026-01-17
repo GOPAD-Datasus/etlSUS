@@ -18,7 +18,7 @@ def extract(dataset: dict, verbose: bool = False) -> None:
         Warning: If urlretrieve fails to download a file
     """
     for year, file in dataset['files'].items():
-        file_name = Path(f'{dataset['prefix']}{year}{Path(file).suffix}')
+        file_name = Path(f'{dataset["prefix"]}{year}{Path(file).suffix}')
         output_path = Path(config.RAW_DIR) / file_name
 
         if not file_exists(output_path):
