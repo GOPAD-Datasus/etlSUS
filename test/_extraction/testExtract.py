@@ -9,7 +9,7 @@ from etlsus import extract
 
 class TestExtract(unittest.TestCase):
 
-    @patch('etlsus.extraction.extraction..config.RAW_DIR', '/mock/raw/dir')
+    @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     @patch('etlsus.extraction.extraction.file_exists')
     @patch('etlsus.extraction.extraction.urlretrieve')
     def test_extract_successful_downloads(self,
@@ -40,7 +40,7 @@ class TestExtract(unittest.TestCase):
             'https://example.com/data2021.csv', expected_path2
         )
 
-    @patch('etlsus.extraction.extraction..config.RAW_DIR', '/mock/raw/dir')
+    @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     @patch('etlsus.extraction.extraction.file_exists')
     def test_extract_skips_existing_files(self, mock_file_exists):
         dataset = {
@@ -55,7 +55,7 @@ class TestExtract(unittest.TestCase):
 
         extract(dataset)
 
-    @patch('etlsus.extraction.extraction..config.RAW_DIR', '/mock/raw/dir')
+    @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     @patch('etlsus.extraction.extraction.file_exists')
     @patch('etlsus.extraction.extraction.urlretrieve')
     def test_extract_handles_download_errors(self,
@@ -82,7 +82,7 @@ class TestExtract(unittest.TestCase):
             self.assertIn('Failed to download',
                           str(w[0].message))
 
-    @patch('etlsus.extraction.extraction..config.RAW_DIR', '/mock/raw/dir')
+    @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     def test_extract_empty_dataset(self):
         dataset = {
             'files': {},
