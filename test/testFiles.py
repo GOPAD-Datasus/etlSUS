@@ -68,6 +68,30 @@ class TestFiles(unittest.TestCase):
         expected = [file_found_1, file_found_2]
         self.assertEqual(result, expected)
 
+    def test_get_file_name_success_no_folder(self):
+        excluding_path = Path(self.test_path) / 'raw'
+        excluding_path.mkdir()
+
+        file_path = excluding_path / 'file_name.csv'
+        file_path.touch()
+
+        result = files.get_file_name(file_path, excluding_path)
+        expected = 'file_name'
+        self.assertEqual(result, expected)
+
+    def test_get_file_name_success_with_folder(self):
+        file_location = Path(self.test_path) / 'raw'
+        file_location.mkdir()
+
+        file_path = file_location / 'file_name'
+        file_path.mkdir()
+        file_path = file_path / 'any_name.csv'
+        file_path.touch()
+
+        result = files.get_file_name(file_path, file_location)
+        expected = 'file_name'
+        self.assertEqual(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

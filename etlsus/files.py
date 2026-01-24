@@ -33,3 +33,13 @@ def get_files_from_dir(
         files = [file for file in path.glob(f'**/*{extension}')]
 
     return files
+
+
+def get_file_name(file_path: Path, excluding_path: Path) -> str:
+    """
+    Get the folder/file name directly after excluding_path.
+    """
+    if file_path.parent.name != excluding_path.name:
+        return file_path.parent.name
+    else:
+        return file_path.stem
