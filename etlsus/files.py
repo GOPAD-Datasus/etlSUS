@@ -9,18 +9,27 @@ def file_exists(file_path: str | Path) -> bool:
     return Path(file_path).exists()
 
 
-def get_files_from_dir(folder_dir: str, extension: str) -> List[Path]:
+def get_files_from_dir(
+        folder_dir: str,
+        extension: str,
+        infix: str = None
+) -> List[Path]:
     """
     Retrieves all files from a directory with matching extension.
 
     param:
         folder_dir (str): Directory path to search
         extension (str): Expected file extension (e.g., 'csv', '.yaml')
+        infix (str): Optional string used to filter files
     returns:
         List[Path]: Full file paths matching the criteria
     """
     path = Path(folder_dir).resolve()
 
-    files = [file for file in path.glob(f'**/*{extension}')]
+    if infix:
+        files = [file for file in path.glob(f'**/*{extension}')
+                 if infix in str(file)]
+    else:
+        files = [file for file in path.glob(f'**/*{extension}')]
 
     return files

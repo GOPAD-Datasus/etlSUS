@@ -50,6 +50,24 @@ class TestFiles(unittest.TestCase):
 
         self.assertEqual(result, expected)
 
+    def test_get_files_from_dir_prefix(self):
+        ext = '.txt'
+        prefix = 'test'
+        folder = Path(self.test_path) / 'test'
+        folder.mkdir()
+
+        file_missing = Path(self.test_path) / 'a.txt'
+        file_found_1 = Path(self.test_path) / 'test_b.txt'
+        file_found_2 = Path(self.test_path) / 'test' / 'c.txt'
+
+        file_missing.touch()
+        file_found_1.touch()
+        file_found_2.touch()
+
+        result = files.get_files_from_dir(self.test_path, ext, prefix)
+        expected = [file_found_1, file_found_2]
+        self.assertEqual(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
