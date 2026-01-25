@@ -1,4 +1,4 @@
-from typing import Literal, Union, List
+from typing import Literal
 
 from hydra import compose, initialize
 
@@ -6,8 +6,13 @@ from etlsus import extract, transform, load
 
 
 def pipeline(
-        dataset: Union[Literal['SINASC', 'SIM'], List[str]],
-        generic_yaml_file: str,
+        dataset: Literal['SINASC', 'SIM'],
+
+        formalize_columns: bool,
+        formalize_dtype: bool,
+        formalize_values: bool,
+        ignored_values: bool,
+        fix_dates: bool,
 
         file_prefix: str = None,
 
@@ -20,18 +25,18 @@ def pipeline(
     with initialize(version_base=None, config_path='./conf'):
         cfg = compose(config_name='config')
 
-        if dataset == 'SINASC':
-            extract(cfg.extract['SINASC'], verbose=verbose)
-        elif dataset == 'SIM':
-            extract(cfg.extract['SIM'], verbose=verbose)
-        else:
-            dataset = {
-                'prefix': file_prefix,
-                'files': dict(zip(range(len(dataset)), dataset))
-            }
-            extract(dataset, verbose=verbose)
+        if dataset == 'SINASC' or dataset == 'SIM':
+            extract(cfg.extract[dataset], verbose=verbose)
 
-        transform(generic_yaml_file, verbose=verbose)
+            transform(
+                cfg.transform[dataset],
+                formalize_columns,
+                formalize_dtype,
+                formalize_values,
+                ignored_values,
+                fix_dates,
+                verbose=verbose,
+            )
 
         if table_name:
             load(table_name, verbose, custom_dir=custom_dir, **kwargs)
