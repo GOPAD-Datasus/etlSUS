@@ -43,7 +43,6 @@ class BaseProcessor:
         """Saves the dataframe on specified path."""
         file_name = Path(self.file_name).with_suffix(extension)
         output_file_path = PROCESSED_DIR / file_name
-        print(output_file_path)
         self.df.to_parquet(output_file_path, compression='gzip')
 
     # Columns

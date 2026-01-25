@@ -12,10 +12,8 @@ from etlsus.transformation.processor import BaseProcessor
 
 
 class TestBaseProcessor(unittest.TestCase):
-    @patch('etlsus.transformation.processor.BaseProcessor.get_file_name')
-    def setUp(self, mock_get_file_name):
+    def setUp(self):
         self.test_dir = tempfile.mkdtemp()
-        mock_get_file_name.return_value = 'test'
 
         self.csv_path = Path(self.test_dir) / 'test.csv'
         self.csv_path.touch(exist_ok=True)
@@ -24,6 +22,7 @@ class TestBaseProcessor(unittest.TestCase):
             f.write(data)
 
         self.bp = BaseProcessor(self.csv_path, {})
+        self.bp.file_name = 'test'
 
     def tearDown(self):
         shutil.rmtree(self.test_dir)
