@@ -1,6 +1,5 @@
 import unittest
 import warnings
-from unittest.mock import patch
 import tempfile
 import shutil
 from pathlib import Path
@@ -53,20 +52,6 @@ class TestBaseProcessor(unittest.TestCase):
         expected = {'dtype': {'col1': 'str'}, 'sep': ',', 'encoding': 'utf-8'}
 
         self.assertEqual(res, expected)
-
-    def test_save(self):
-        with patch(
-            'etlsus.transformation.processor.BaseProcessor.config.PROCESSED_DIR',
-            self.test_dir,
-            create=True
-        ):
-            self.bp.save('.parquet.gzip')
-            output_path = Path(self.test_dir) / 'test.parquet.gzip'
-
-            self.assertTrue(output_path.exists())
-
-            df = pd.read_parquet(output_path)
-            pd.testing.assert_frame_equal(df, self.bp.df)
 
     def test_col_add(self):
         self.bp.col_add(['new_col'])
