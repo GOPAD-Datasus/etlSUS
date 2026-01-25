@@ -1,0 +1,55 @@
+# Resulting schema after processing
+
+SINASC:
+  formalize_columns:
+    [IDADEMAE, DTNASCMAE, RACACORMAE, ESTCIVMAE, QTDFILVIVO, QTDFILMORT,
+     QTDGESTANT, QTDPARTNOR, QTDPARTCES, PARIDADE, ESCMAE, ESCMAE2010,
+     SERIESCMAE, ESCMAEAGR1, CODMUNNATU, CODUFNATU, NATURALMAE, CODMUNRES,
+     CODOCUPMAE, DTULTMENST, SEMAGESTAC, GESTACAO, GRAVIDEZ, CONSPRENAT,
+     CONSULTAS, MESPRENAT, KOTELCHUCK, PARTO, TPAPRESENT, STTRABPART,
+     STCESPARTO, TPROBSON, TPNASCASSI, DTNASC, HORANASC, APGAR1, APGAR5,
+     PESO, SEXO, RACACOR, IDANOMAL, CODANOMAL, LOCNASC, CODESTAB,
+     CODMUNNASC, IDADEPAI, TPMETESTIM, STDNEPIDEM, STDNNOVA]
+
+
+  formalize_values:
+    # unifies different categories between years
+    IDANOMAL: {2: 0}
+    IDADEPAI: {'5D': 50}
+    SEXO: {'M': 1, 'F': 2, 'I': 0}
+    CODUFNATU: {'nu': -1}
+
+
+  formalize_dtypes:
+    # final dtypes
+    # (!) Date time variables aren't included here because of fix_dates.
+    #     Without fix_dates, their final dtype is str.
+    'int': [SEXO, IDANOMAL, PARIDADE, STDNNOVA, KOTELCHUCK]
+    'float': [IDADEPAI, CODUFNATU]
+    'string': [CODANOMAL]
+
+
+SIM:
+  formalize_columns:
+    [DTNASC, IDADE, SEXO, RACACOR, PESO, ESTCIV, ESC, ESC2010, ESCFALAGR1,
+     SERIESCFAL, OCUP, CODMUNRES, CODMUNNATU, NATURAL, IDADEMAE, QTDFILVIVO,
+     QTDFILMORT, ESCMAE, ESCMAE2010, ESCMAEAGR1, SERIESCMAE, OCUPMAE,
+     SEMAGESTAC, GESTACAO, GRAVIDEZ, PARTO, DTOBITO, HORAOBITO, LOCOCOR,
+     CIRCOBITO, ACIDTRAB, OBITOPARTO, OBITOGRAV, OBITOPUERP, TPMORTEOCO,
+     CAUSABAS, CAUSABAS_O, CAUSAMAT, LINHAA, LINHAB, LINHAC, LINHAD, LINHAII,
+     ATESTADO, ASSISTMED, EXAME, CIRURGIA, NECROPSIA, CODMUNOCOR, CODESTAB,
+     DTCONINV, FONTEINV, FONTES, TPNIVELINV, TPRESGINFO, ALTCAUSA]
+
+
+  formalize_values:
+    CIRCOBITO: {'C': -1}
+    TPNIVELINV: {'M': 1, 'R': 2, 'E': 3}
+
+
+  formalize_dtypes:
+    # final dtypes
+    # (!) Date time variables aren't included here because of fix_dates.
+    #     Without fix_dates, their final dtype is str.
+    'int': [LOCOCOR]
+    'float': [CIRCOBITO, TPNIVELINV]
+    'string': [ATESTADO, FONTES]

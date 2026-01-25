@@ -1,0 +1,82 @@
+# Special values often removed during data processing
+# The two main categories are: 'Ignored' and misinputs found on dates
+
+SINASC:
+  ignored_values:
+    LOCNASC: [9]
+    IDADEMAE: [99]
+    ESTCIVMAE: [9]
+    ESCMAE: [9]
+    QTDFILVIVO: [99]
+    QTDFILMORT: [99]
+    GESTACAO: [9]
+    GRAVIDEZ: [9]
+    PARTO: [9]
+    CONSULTAS: [9]
+    APGAR1: [99]
+    APGAR5: [99]
+    PESO: [9999]
+    IDANOMAL: [9]
+    CODESTAB: [8888888]
+
+    CODMUNNATU: [999999]
+    CONSPRENAT: [99]
+    ESCMAE2010: [9]
+    IDADEPAI: [99]
+    QTDGESTANT: [99]
+    QTDPARTCES: [99]
+    QTDPARTNOR: [99]
+    MESPRENAT: [99]
+    STCESPARTO: [9]
+    STTRABPART: [9]
+    TPAPRESENT: [9]
+    TPMETESTIM: [8, 9]
+    TPNASCASSI: [9]
+    TPROBSON: [11]
+
+    CODUFNATU: [-1]
+
+
+  fix_dates:
+    columns: # Columns addressed by fix_dates function
+      DTNASC: '%d%m%Y'
+      DTNASCMAE: '%d%m%Y'
+      HORANASC: '%H%M'
+
+    remove:
+      HORANASC: ',/-?>'
+
+    replace:
+      '24120198': '24121980'
+      '13090198': '13091986'
+      '30070199': '30071997'
+      '21050199': '21051996'
+      '20010199': '20011990'
+      '14070100': '14071999'
+      '19081086': '19081986'
+      '09070200': '09072000'
+      '31070199': '31071990'
+      '22011199': '22011991'
+      '12040199': '12041999'
+      '04080200': '04082000'
+
+
+SIM:
+  ignored_values:
+    IDADE: [999]
+    ESTCIV: [9]
+
+    CIRCOBITO: [-1]
+
+
+  fix_dates:
+    columns:
+      DTNASC: '%d%m%Y'
+      HORAOBITO: '%H%M'
+      DTOBITO: '%d%m%Y'
+
+    remove:
+      HORAOBITO: ',hH'
+
+    replace:
+      '27085193': '27081935'

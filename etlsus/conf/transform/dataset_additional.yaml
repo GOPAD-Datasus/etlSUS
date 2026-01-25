@@ -1,0 +1,111 @@
+# Additional info related to compatibility between files
+# Used internally to ensure every file can be processed correctly
+
+SINASC:
+  prefix: 'DN' # copy of download_url.prefix, used to allow multiple pipelines
+               # to function properly
+
+
+  # used to supress pandas warnings due to mixed types
+  # (often string misinputs)
+  dtype:
+    IDADEPAI:
+      dtype: str
+      file: ['DN2013']
+    CODUFNATU:
+      dtype: str
+      file: ['DN2018', 'DN2019', 'DN2020', 'DN2021', 'DN2022', 'DN2023']
+
+    # needed to properly format date columns, since pandas reads these
+    # as int or float, thus removing any zeros at the start of it
+    HORANASC:
+      dtype: str
+      file: ['DN2012', 'DN2013', 'DN2014', 'DN2015', 'DN2017',
+             'DN2018', 'DN2019', 'DN2020', 'DN2021', 'DN2022', 'DN2023']
+    DTNASC:
+      dtype: str
+      file: ['DN2012', 'DN2013', 'DN2014', 'DN2015', 'DN2017',
+             'DN2018', 'DN2019', 'DN2020', 'DN2021', 'DN2022', 'DN2023']
+    DTNASCMAE:
+      dtype: str
+      file: ['DN2012', 'DN2013', 'DN2014', 'DN2015', 'DN2017',
+             'DN2018', 'DN2019', 'DN2020', 'DN2021', 'DN2022', 'DN2023']
+
+    horanasc:
+      dtype: str
+      file: ['DN2016']
+    dtnasc:
+      dtype: str
+      file: ['DN2016']
+    dtnascmae:
+      dtype: str
+      file: ['DN2016']
+
+
+  sep:
+    ',': ['DN2012', 'DN2013']
+    ';': ['DN2014', 'DN2015', 'DN2016', 'DN2017', 'DN2018',
+          'DN2019', 'DN2020', 'DN2021', 'DN2022', 'DN2023']
+
+
+  encoding: {}
+
+
+  year_specific:
+    # (!) 2012 seems to have two cols for race of newborn,
+    #     but RACACOR's values are the same as RACACORMAE's
+    DN2012:
+      remove: [RACACOR]
+      rename: {RACACORN: RACOCOR}
+
+    # (!) 2016's columns don't follow the capitalized pattern
+    DN2016:
+      capitalize:
+
+
+SIM:
+  prefix: 'DO' # copy of download_url.prefix, used to allow multiple pipelines
+               # to function properly
+
+
+  dtype:
+    CIRCOBITO:
+      dtype: str
+      file: ['DO2012']
+    CAUSAMAT:
+      dtype: str
+      file: ['DO2012', 'DO2013', 'DO2014', 'DO2015', 'DO2016', 'DO2017',
+             'DO2018', 'DO2019', 'DO2020', 'DO2021', 'DO2022', 'DO2023']
+    ESTABDESCR:
+      dtype: str
+      file: ['DO2014', 'DO2015']
+    CB_PRE:
+      dtype: str
+      file: ['DO2014']
+    TPNIVELINV:
+      dtype: str
+      file: ['DO2020']
+
+    DTNASC:
+      dtype: str
+      file: ['DO2012', 'DO2013', 'DO2014', 'DO2015', 'DO2016', 'DO2017',
+             'DO2018', 'DO2019', 'DO2020', 'DO2021', 'DO2022', 'DO2023']
+    DTOBITO:
+      dtype: str
+      file: ['DO2012', 'DO2013', 'DO2014', 'DO2015', 'DO2016', 'DO2017',
+             'DO2018', 'DO2019', 'DO2020', 'DO2021', 'DO2022', 'DO2023']
+    HORAOBITO:
+      dtype: str
+      file: ['DO2012', 'DO2013', 'DO2014', 'DO2015', 'DO2016', 'DO2017',
+             'DO2018', 'DO2019', 'DO2020', 'DO2021', 'DO2022', 'DO2023']
+
+  sep:
+    ';': ['DO2012', 'DO2013', 'DO2014', 'DO2015', 'DO2016', 'DO2017',
+          'DO2018', 'DO2019', 'DO2020', 'DO2021', 'DO2022', 'DO2023']
+
+
+  encoding:
+    'latin1': ['DO2013', 'DO2014', 'DO2015']
+
+
+  year_specific: {}
