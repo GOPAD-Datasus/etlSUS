@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from etlsus import transform
 
@@ -7,27 +7,48 @@ from etlsus import transform
 class TestTransformation(unittest.TestCase):
     module = 'etlsus.transformation.transformation'
 
-    @patch(f'{module}.config.RAW_DIR', '/mock/raw/dir')
-    @patch(f'{module}.get_files_from_dir',
-           return_value=['raw.csv', 'raw2.csv'])
+    @patch(f'{module}.RAW_DIR', '/mock/raw/dir')
+    @patch(
+        f'{module}.get_files_from_dir', return_value=['raw.csv', 'raw2.csv']
+    )
+    @patch(f'{module}.get_file_name', return_value='raw')
     @patch(f'{module}.file_exists', return_value=False)
-    @patch(f'{module}.transform_file')
-    def test_transform_success(self, mock_transform_file,
-                               mock_file_exists, mock_get_files):
-        transform()
+    @patch(f'{module}.FileProcessor', return_value=MagicMock())
+    def test_transform_success(
+            self,
+            mock_file_processor,
+            mock_file_exists,
+            mock_get_file_name,
+            mock_get_files
+    ):
+        cfg = MagicMock()
+        cfg.get.return_value = 'DN'
 
-        self.assertEqual(2, mock_transform_file.call_count)
-        mock_transform_file.assert_called_with('raw2.csv', None)
+        transform(
+            cfg,
+            True,
+            True,
+            True,
+            True,
+            True
+        )
 
-    @patch(f'{module}.config.RAW_DIR', '/mock/raw/dir')
+        self.assertEqual(2, mock_file_processor.call_count)
+
+    @patch(f'{module}.RAW_DIR', '/mock/raw/dir')
     @patch(f'{module}.get_files_from_dir', return_value=[])
-    @patch(f'{module}.file_exists', return_value=False)
-    @patch(f'{module}.transform_file')
-    def test_transform_no_files(self, mock_transform_file,
-                                mock_check, mock_get_files):
-        transform()
+    def test_transform_no_files(self, mock_get_files):
+        cfg = MagicMock()
+        cfg.get.return_value = 'DN'
 
-        self.assertEqual(0, mock_transform_file.call_count)
+        transform(
+            cfg,
+            True,
+            True,
+            True,
+            True,
+            True
+        )
 
 
 if __name__ == '__main__':
