@@ -32,11 +32,6 @@ PROCESSED_DIR = DATA_DIR / 'processed'
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
-if 'input_dir' in os.environ.keys():
-    INPUT_DIR = os.environ['input_dir']
-else:
-    INPUT_DIR = BASE_DIR / 'input'
-
 
 def get_database_config(env='prod'):
     if env == 'test':
