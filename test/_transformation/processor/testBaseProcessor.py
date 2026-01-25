@@ -56,8 +56,9 @@ class TestBaseProcessor(unittest.TestCase):
 
     def test_save(self):
         with patch(
-            'etlsus.transformation.processor.BaseProcessor.PROCESSED_DIR',
-            self.test_dir
+            'etlsus.transformation.processor.BaseProcessor.config.PROCESSED_DIR',
+            self.test_dir,
+            create=True
         ):
             self.bp.save('.parquet.gzip')
             output_path = Path(self.test_dir) / 'test.parquet.gzip'

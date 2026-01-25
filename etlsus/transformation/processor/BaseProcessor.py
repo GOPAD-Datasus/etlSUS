@@ -5,7 +5,7 @@ from typing import List, Dict
 import pandas as pd
 import numpy as np
 
-from etlsus.config import RAW_DIR, PROCESSED_DIR
+from etlsus import config
 from etlsus.files import get_file_name
 
 pd.set_option('future.no_silent_downcasting', True)
@@ -13,7 +13,7 @@ pd.set_option('future.no_silent_downcasting', True)
 
 class BaseProcessor:
     def __init__(self, url: Path, cfg_rv):
-        self.file_name = get_file_name(url, RAW_DIR)
+        self.file_name = get_file_name(url, config.RAW_DIR)
 
         self.df = pd.read_csv(url, **self._get_read_variables(cfg_rv))
 
@@ -42,7 +42,7 @@ class BaseProcessor:
     def save(self, extension):
         """Saves the dataframe on specified path."""
         file_name = Path(self.file_name).with_suffix(extension)
-        output_file_path = PROCESSED_DIR / file_name
+        output_file_path = config.PROCESSED_DIR / file_name
         self.df.to_parquet(output_file_path, compression='gzip')
 
     # Columns
