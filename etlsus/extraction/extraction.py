@@ -7,19 +7,27 @@ from etlsus import config
 from etlsus.files import file_exists
 
 
-def extract(dataset: dict, verbose: bool = False) -> None:
+def extract(
+        cfg: dict,
+        years_to_extract: list = None,
+        verbose: bool = False
+) -> None:
     """
-    Main extraction function. Downloads from every url
-    inside the files key from input.yaml file.
+    Main extraction function. Downloads urls inside
+    the 'files' key in download_urls.
 
     param:
-        dataset (Dict): URL to files and Prefix for files
+        cfg (Dict): URL to files and Prefix for files
+        years_to_extract (List): List of years to extract
         verbose (bool): Whether to print the full summary of execution
     raises:
         Warning: If urlretrieve fails to download a file
     """
-    for year, file in dataset['files'].items():
-        file_name = Path(f'{dataset["prefix"]}{year}{Path(file).suffix}')
+    for year, file in cfg['files'].items():
+        if years_to_extract and year not in years_to_extract:
+            continue
+
+        file_name = Path(f'{cfg["prefix"]}{year}{Path(file).suffix}')
         output_path = Path(config.RAW_DIR) / file_name
 
         if not file_exists(output_path):

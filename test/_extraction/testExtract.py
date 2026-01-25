@@ -12,9 +12,9 @@ class TestExtract(unittest.TestCase):
     @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     @patch('etlsus.extraction.extraction.file_exists')
     @patch('etlsus.extraction.extraction.urlretrieve')
-    def test_extract_successful_downloads(self,
-                                          mock_urlretrieve,
-                                          mock_file_exists):
+    def test_extract_successful_downloads(
+            self, mock_urlretrieve, mock_file_exists
+    ):
         dataset = {
             'files': {
                 '2020': 'https://example.com/data2020.csv',
@@ -42,6 +42,33 @@ class TestExtract(unittest.TestCase):
 
     @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     @patch('etlsus.extraction.extraction.file_exists')
+    @patch('etlsus.extraction.extraction.urlretrieve')
+    def test_extract_years_to_extract(
+            self, mock_urlretrieve, mock_file_exists
+    ):
+        dataset = {
+            'files': {
+                '2020': 'https://example.com/data2020.csv',
+                '2021': 'https://example.com/data2021.csv'
+            },
+            'prefix': 'prefix_'
+        }
+
+        mock_file_exists.return_value = False
+
+        extract(dataset, years_to_extract=['2021'])
+
+        self.assertEqual(mock_file_exists.call_count, 1)
+        self.assertEqual(mock_urlretrieve.call_count, 1)
+
+        expected_path = Path('/mock/raw/dir', 'prefix_2021.csv')
+
+        mock_urlretrieve.assert_any_call(
+            'https://example.com/data2021.csv', expected_path
+        )
+
+    @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
+    @patch('etlsus.extraction.extraction.file_exists')
     def test_extract_skips_existing_files(self, mock_file_exists):
         dataset = {
             'files': {'1': 'https://downloaded_file.csv'},
@@ -58,9 +85,9 @@ class TestExtract(unittest.TestCase):
     @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     @patch('etlsus.extraction.extraction.file_exists')
     @patch('etlsus.extraction.extraction.urlretrieve')
-    def test_extract_handles_download_errors(self,
-                                             mock_urlretrieve,
-                                             mock_file_exists):
+    def test_extract_handles_download_errors(
+            self, mock_urlretrieve, mock_file_exists
+    ):
         dataset = {
             'files': {'1': 'https://example.com/badurl.csv'},
             'prefix': 'prefix_'

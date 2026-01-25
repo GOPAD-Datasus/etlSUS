@@ -14,7 +14,7 @@ def pipeline(
         ignored_values: bool,
         fix_dates: bool,
 
-        file_prefix: str = None,
+        years_to_extract: list = None,
 
         table_name: str = None,
         custom_dir: str = None,
@@ -26,7 +26,11 @@ def pipeline(
         cfg = compose(config_name='config')
 
         if dataset == 'SINASC' or dataset == 'SIM':
-            extract(cfg.extract[dataset], verbose=verbose)
+            extract(
+                cfg.extract[dataset],
+                years_to_extract,
+                verbose=verbose
+            )
 
             transform(
                 cfg.transform[dataset],
