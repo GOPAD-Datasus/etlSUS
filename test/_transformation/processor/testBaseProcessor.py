@@ -8,11 +8,11 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-from transformation.processor import BaseProcessor
+from etlsus.transformation.processor import BaseProcessor
 
 
 class TestBaseProcessor(unittest.TestCase):
-    @patch('transformation.processor.BaseProcessor.get_file_name')
+    @patch('etlsus.transformation.processor.BaseProcessor.get_file_name')
     def setUp(self, mock_get_file_name):
         self.test_dir = tempfile.mkdtemp()
         mock_get_file_name.return_value = 'test'
@@ -57,7 +57,7 @@ class TestBaseProcessor(unittest.TestCase):
 
     def test_save(self):
         with patch(
-            'transformation.processor.BaseProcessor.PROCESSED_DIR',
+            'etlsus.transformation.processor.BaseProcessor.PROCESSED_DIR',
             self.test_dir
         ):
             self.bp.save('.parquet.gzip')
