@@ -1,3 +1,4 @@
+import shutil
 import warnings
 from pathlib import Path
 from urllib.request import urlretrieve
@@ -30,6 +31,15 @@ def extract(dataset: dict, verbose: bool = False) -> None:
             except Exception as e:
                 error_msg = f'Failed to download {year}: {e}\n'
                 warnings.warn(error_msg)
+
+        if output_path.suffix == '.zip':
+            unzip_dir_path = output_path.with_suffix('')
+
+            if file_exists(unzip_dir_path):
+                continue
+
+            unzip_dir_path.mkdir()
+            shutil.unpack_archive(output_path, unzip_dir_path)
 
     if verbose:
         print('Finished downloading files')
