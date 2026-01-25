@@ -1,2 +1,5 @@
 defaults:
   - extract/download_urls
+  - transform/dataset_schema
+  - transform/dataset_values
+  - transform/dataset_additional
