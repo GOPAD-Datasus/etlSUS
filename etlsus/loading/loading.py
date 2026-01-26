@@ -1,16 +1,17 @@
 import warnings
 
 import pandas as pd
+import sqlalchemy
 
 from etlsus import config
-from .database import create_db_engine, insert_into_db
 from etlsus.files import get_files_from_dir
 
 
 def load(
+        database_engine: sqlalchemy.engine.base.Engine,
         table_name: str,
         verbose: bool = False,
-        custom_dir: str = None,
+        infix: str = None,
         **kwargs
 ) -> None:
     """
@@ -18,10 +19,10 @@ def load(
     the select database
 
     param:
+        database_engine (Engine): SqlAlchemy engine object
         table_name (str): Name of the table inside the db
         verbose (bool): Whether to print the full summary of execution
-        custom_dir (str): (Optional) Custom directory to look for files
-        kwargs: Additional parameters for to_sql method.
+        kwargs: Additional parameters for df.to_sql method.
             For more information about said parameters visit:
             https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html
     raises:
@@ -30,34 +31,22 @@ def load(
         Warning: If list of processed files is empty or fails to load a
                  file into database
     """
-    try:
-        engine = create_db_engine()
-    except (AttributeError, ImportError) as e:
-        raise RuntimeError(f'Failed to create database'
-                           f' engine: {str(e)}') from e
+    file_dir = config.PROCESSED_DIR
+    file_list = get_files_from_dir(
+        file_dir, extension='.parquet.gzip', infix=infix
+    )
 
-    if custom_dir:
-        where_files = custom_dir
-    else:
-        where_files = config.PROCESSED_DIR
-
-    try:
-        file_list = get_files_from_dir(where_files, extension='.parquet.gzip')
-    except Exception as e:
-        raise RuntimeError(f'Failed to load file list: {str(e)}') from e
-
-    with engine.connect() as conn:
-        for item in file_list:
+    with database_engine.connect() as conn:
+        for file in file_list:
             if verbose:
-                print(f'Loading {item} onto the database')
+                print(f'Loading {file} onto the database')
 
             try:
-                df = pd.read_parquet(item)
+                df = pd.read_parquet(file)
                 with conn.begin():
-                    insert_into_db(conn, df,
-                                   table_name, **kwargs)
+                    df.to_sql(table_name, conn, **kwargs)
             except Exception as e:
-                warnings.warn(f'Failed to load {item}: {e}')
+                warnings.warn(f'Failed to load {file}: {e}')
 
     if verbose:
         print('Finished loading files')

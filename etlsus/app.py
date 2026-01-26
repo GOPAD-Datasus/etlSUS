@@ -1,5 +1,6 @@
 from typing import Literal
 
+import sqlalchemy
 from hydra import compose, initialize
 
 from etlsus import extract, transform, load
@@ -7,17 +8,17 @@ from etlsus import extract, transform, load
 
 def pipeline(
         dataset: Literal['SINASC', 'SIM'],
-
-        formalize_columns: bool,
-        formalize_dtype: bool,
-        formalize_values: bool,
-        ignored_values: bool,
-        fix_dates: bool,
-
         years_to_extract: list = None,
 
+        formalize_columns: bool = True,
+        formalize_dtype: bool = True,
+        formalize_values: bool = True,
+        ignored_values: bool = True,
+        fix_dates: bool = True,
+
+        database_engine: sqlalchemy.engine.base.Engine = None,
         table_name: str = None,
-        custom_dir: str = None,
+
         verbose: bool = False,
         **kwargs,
 ):
@@ -42,5 +43,11 @@ def pipeline(
                 verbose=verbose,
             )
 
-        if table_name:
-            load(table_name, verbose, custom_dir=custom_dir, **kwargs)
+            if table_name and database_engine:
+                load(
+                    database_engine,
+                    table_name,
+                    verbose=verbose,
+                    infix=cfg.extract[dataset]['prefix'],
+                    **kwargs
+                )
