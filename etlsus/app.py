@@ -40,6 +40,7 @@ def pipeline(
                 formalize_values,
                 ignored_values,
                 fix_dates,
+                infix=cfg.extract[dataset]['prefix'],
                 verbose=verbose,
             )
 

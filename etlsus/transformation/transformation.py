@@ -13,6 +13,7 @@ def transform(
         formalize_values: bool,
         ignored_values: bool,
         fix_dates: bool,
+        infix: str = None,
         verbose: bool = False,
 ) -> None:
     """
@@ -23,7 +24,7 @@ def transform(
     processed_folder = PROCESSED_DIR
     final_extension = '.parquet.gzip'
 
-    raw_files = get_files_from_dir(raw_folder, '.csv', cfg_trans.get('prefix'))
+    raw_files = get_files_from_dir(raw_folder, '.csv', infix=infix)
 
     for raw_file in raw_files:
         file_name = get_file_name(raw_file, RAW_DIR)

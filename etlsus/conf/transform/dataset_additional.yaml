@@ -2,10 +2,6 @@
 # Used internally to ensure every file can be processed correctly
 
 SINASC:
-  prefix: 'DN' # copy of download_url.prefix, used to allow multiple pipelines
-               # to function properly
-
-
   # used to supress pandas warnings due to mixed types
   # (often string misinputs)
   dtype:
@@ -64,10 +60,6 @@ SINASC:
 
 
 SIM:
-  prefix: 'DO' # copy of download_url.prefix, used to allow multiple pipelines
-               # to function properly
-
-
   dtype:
     CIRCOBITO:
       dtype: str
