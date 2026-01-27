@@ -136,10 +136,10 @@ class BaseProcessor:
 
     def dtype_optimization(self) -> None:
         """Optimizes numeric data types for memory efficiency."""
-        for col in self.df.columns:
-            if self.df[col].dtype == np.int64:
+        for col in self.df.select_dtypes(include='number').columns:
+            if np.issubdtype(self.df[col].dtype, np.integer):
                 self.df[col] = pd.to_numeric(self.df[col], downcast='integer')
-            elif self.df[col].dtype == np.float64:
+            elif np.issubdtype(self.df[col].dtype, np.floating):
                 self.df[col] = pd.to_numeric(self.df[col], downcast='float')
 
     def dtype_datetime(self, target: Dict) -> None:
