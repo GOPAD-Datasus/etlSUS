@@ -25,7 +25,7 @@ SINASC:
     # (!) Date time variables aren't included here because of fix_dates.
     #     Without fix_dates, their final dtype is str.
     'int': [SEXO, IDANOMAL, PARIDADE, STDNNOVA, KOTELCHUCK]
-    'float': [IDADEPAI, CODUFNATU]
+    'float': [IDADEMAE, IDADEPAI, CODUFNATU, TPROBSON]
     'string': [CODANOMAL]
 
 
