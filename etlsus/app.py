@@ -3,7 +3,9 @@ from typing import Literal
 import sqlalchemy
 from hydra import compose, initialize
 
-from etlsus import extract, transform, load
+import config
+from etlsus import extract, transform, load, merger
+from .files import get_files_from_dir
 
 
 def pipeline(
@@ -18,6 +20,8 @@ def pipeline(
 
         database_engine: sqlalchemy.engine.base.Engine = None,
         table_name: str = None,
+
+        merge_at_end: bool = None,
 
         verbose: bool = False,
         **kwargs,
@@ -52,3 +56,14 @@ def pipeline(
                     infix=cfg.extract[dataset]['prefix'],
                     **kwargs
                 )
+
+            if merge_at_end:
+                return merger(infix=cfg.extract[dataset]['prefix'])
+            else:
+                return get_files_from_dir(
+                    config.PROCESSED_DIR,
+                    '.gzip',
+                    infix=cfg.extract[dataset]['prefix']
+                )
+        else:
+            raise ValueError('Dataset must be "SIM" or "SINASC"')
