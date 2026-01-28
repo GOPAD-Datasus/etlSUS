@@ -3,8 +3,7 @@ from typing import Literal
 import sqlalchemy
 from hydra import compose, initialize
 
-import config
-from etlsus import extract, transform, load, merger
+from etlsus import extract, transform, load, merger, config
 from .files import get_files_from_dir
 
 
