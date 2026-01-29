@@ -14,13 +14,6 @@ def extract(
     """
     Main extraction function. Downloads urls inside
     the 'files' key in download_urls.
-
-    param:
-        cfg (Dict): URL to files and Prefix for files
-        years_to_extract (List): List of years to extract
-        verbose (bool): Whether to print the full summary of execution
-    raises:
-        Warning: If urlretrieve fails to download a file
     """
     for year, file in cfg['files'].items():
         if years_to_extract and year not in years_to_extract:
