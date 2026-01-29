@@ -1,27 +1,10 @@
 import os
-import warnings
 from pathlib import Path
-
-from dotenv import load_dotenv
-
-
-project_root = Path.cwd()
-env_path = project_root / '.env'
-if env_path.exists():
-    load_dotenv(dotenv_path=env_path)
-else:
-    msg = f'Unable to find .env at {env_path}'
-    warnings.warn(msg)
 
 
 def create_base_dir() -> Path:
-    if 'base_dir' in os.environ:
-        return Path(os.environ['base_dir']).resolve()
-    else:
-        try:
-            return Path(__file__).resolve().parent
-        except NameError:
-            return Path.cwd().resolve()
+    path = os.environ.get('ETLSUS_BASE_DIR')
+    return Path(path).resolve()
 
 
 BASE_DIR = create_base_dir()
