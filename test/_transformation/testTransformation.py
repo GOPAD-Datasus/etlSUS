@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 
-from etlsus import transform
+from etlsus.transformation import transform
 
 
 class TestTransformation(unittest.TestCase):

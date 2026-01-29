@@ -1,9 +1,10 @@
 import os
+import tempfile
 from pathlib import Path
 
 
 def create_base_dir() -> Path:
-    path = os.environ.get('ETLSUS_BASE_DIR')
+    path = os.environ.get('ETLSUS_BASE_DIR', tempfile.gettempdir())
     return Path(path).resolve()
 
 

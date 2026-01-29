@@ -2,7 +2,7 @@ import unittest
 import warnings
 from unittest.mock import patch, MagicMock
 
-from etlsus import load
+from etlsus.loading import load
 
 
 class TestLoad(unittest.TestCase):
@@ -35,7 +35,6 @@ class TestLoad(unittest.TestCase):
         self.assertEqual(mock_df.to_sql.call_count, 2)
         mock_engine.connect.assert_called_once()
 
-    # @patch(f'{module}.create_db_engine')
     @patch(f'{module}.pd.read_parquet')
     @patch(f'{module}.get_files_from_dir')
     def test_load_no_file(self, mock_get_files, mock_read_parquet):

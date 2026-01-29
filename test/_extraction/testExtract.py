@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 from urllib.error import URLError
 
-from etlsus import extract
+from etlsus.extraction import extract
 
 
 class TestExtract(unittest.TestCase):
@@ -69,18 +69,18 @@ class TestExtract(unittest.TestCase):
 
     @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     @patch('etlsus.extraction.extraction.file_exists')
-    def test_extract_skips_existing_files(self, mock_file_exists):
+    @patch('etlsus.extraction.extraction.urlretrieve')
+    def test_extract_skips_existing_files(self, mock_url, mock_file_exists):
         dataset = {
             'files': {'1': 'https://downloaded_file.csv'},
             'prefix': 'prefix_'
         }
 
-        def mock_check_side_effect(path):
-            return path.name == 'downloaded_file.csv'
-
-        mock_file_exists.side_effect = mock_check_side_effect
+        mock_file_exists.return_value = True
 
         extract(dataset)
+
+        mock_url.assert_not_called()
 
     @patch('etlsus.extraction.extraction.config.RAW_DIR', '/mock/raw/dir')
     @patch('etlsus.extraction.extraction.file_exists')
