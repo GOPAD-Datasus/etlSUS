@@ -15,17 +15,6 @@ class TestFiles(unittest.TestCase):
     def tearDown(self):
         self.test_dir.cleanup()
 
-    def test_file_exists_success(self):
-        test_file = Path(self.test_path) / 'test_file.txt'
-        test_file.touch()
-        self.assertTrue(files.file_exists(test_file))
-        self.assertTrue(files.file_exists(str(test_file)))
-
-    def test_file_exists_failure(self):
-        non_existent = Path(self.test_path) / 'test_file.txt'
-        self.assertFalse(files.file_exists(non_existent))
-        self.assertFalse(files.file_exists(str(non_existent)))
-
     def test_get_files_from_dir_success(self):
         ext = '.txt'
         folder = Path(self.test_path) / 'folder'

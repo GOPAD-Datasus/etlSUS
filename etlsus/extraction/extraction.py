@@ -4,7 +4,6 @@ from pathlib import Path
 from urllib.request import urlretrieve
 
 from etlsus import config
-from etlsus.files import file_exists
 
 
 def extract(
@@ -30,7 +29,7 @@ def extract(
         file_name = Path(f'{cfg["prefix"]}{year}{Path(file).suffix}')
         output_path = Path(config.RAW_DIR) / file_name
 
-        if not file_exists(output_path):
+        if not output_path.exists():
             if verbose:
                 print(f'Downloading year: {year}\n'
                       f' ↳ Saving at: {output_path}')
@@ -43,7 +42,7 @@ def extract(
         if output_path.suffix == '.zip':
             unzip_dir_path = output_path.with_suffix('')
 
-            if file_exists(unzip_dir_path):
+            if unzip_dir_path.exists():
                 continue
 
             unzip_dir_path.mkdir()

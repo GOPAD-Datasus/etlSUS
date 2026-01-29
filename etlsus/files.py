@@ -4,11 +4,6 @@ from pathlib import Path
 from typing import List
 
 
-def file_exists(file_path: str | Path) -> bool:
-    """Checks if a file exists at the specified path."""
-    return Path(file_path).exists()
-
-
 def get_files_from_dir(
         folder_dir: str,
         extension: str,
