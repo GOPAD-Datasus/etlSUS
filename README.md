@@ -1,4 +1,4 @@
-# ETL-DataSUS
+# etlSUS
 
 [![License: LGPL 2.1](https://img.shields.io/badge/License-LGPL_2.1-g)](https://opensource.org/license/lgpl-2-1)
 ![Python](https://img.shields.io/badge/python-3.9_|_3.10_|_3.11_|_3.12-blue.svg)
@@ -6,15 +6,19 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16916158.svg)](https://doi.org/10.5281/zenodo.16916158)
 
-A streamlined ETL (Extract, Transform, Load) pipeline designed to process Brazil's public healthcare data (DataSUS) from raw CSV files into analysis-ready datasets, using simple YAML files for configuration.
+>Docs are also available in Portuguese [(PT)](docs/README%20PTBR.md)
 
-## The Problem
+An opinionated ETL (Extract, Transform, Load) pipeline designed to process Brazil's public healthcare data (DataSUS) from raw CSV files into analysis-ready datasets.
 
-Brazil's SUS (Sistema Único de Saúde) provides a wealth of public health data, but it often requires significant cleaning, type handling, and transformation before it can be used for analysis. Manually writing scripts for each dataset is time-consuming and error-prone.
+## Overview
 
-## The Solution
+### The Problem
 
-ETL-DataSUS automates this process. You define the extraction sources and transformation rules in declarative YAML configuration files. The library then handles the entire pipeline: downloading the data, applying your transformations, and loading it into a PostgreSQL database.
+Brazil's SUS (Sistema Único de Saúde) provides extensive public health data, but it requires domain-specific preprocessing before analysis. This includes removing unnecessary columns, handling missing values, and optimizing data types. Manually scripting these transformations for each dataset is time-consuming and error-prone.
+
+### The Solution
+
+etlSUS automates the entire process. Simply specify the dataset, and the library handles downloading, transforming, and loading the data into a database and/or merging all files.
 
 ## 🚀 Quick Start
 
@@ -24,76 +28,45 @@ ETL-DataSUS automates this process. You define the extraction sources and transf
 poetry add git+https://github.com/GOPAD-Datasus/ETL-DataSUS.git
 ```
 
-### 2. Configure Your Environment
-
-Copy `.env-example` to `.env` and set your directories and database connection:
-
-```bash
-# .env
-input_dir = './input'   # Where to find your YAML configs
-base_dir = './data'     # Where to store raw/processed files
-
-host = 'localhost'
-port = 12345
-db = 'name'
-
-user = 'postgres'
-password = '*****'
-```
-
-### 3. Create Configuration Files
-
-**Define your data sources in `input/input.yaml`:**
-```yaml
-prefix: DN
-files:
-  2012: https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2012.csv
-```
-
-**Define transformations in `input/DN2012.yaml`:**
-```yaml
-name: 'DN2012'
-read_variables:
-  dtype:
-    'DTNASC': str
-    'DTNASCMAE': str
-transformations:
-  replace_values:
-    'DTNASCMAE': 
-      '24120198': '24121980' # Fix a common date typo
-```
-
-### 4. Run the Pipeline
+### 2. Run the Pipeline
 
 ```python
-from etlsus import extract, transform, load
+from etlsus import pipeline
 
-# Run the entire ETL process
-extract('input/input.yaml', verbose=True)
-transform('input/DN2012.yaml', verbose=True)
-load('sinasc', if_exists='append', chunksize=500)
+
+if __name__ == '__main__':
+    pipeline(
+        dataset='SINASC',  # Choose between 'SINASC' or 'SIM'
+        base_dir='path/to/project/dir',
+    )
 ```
 
-## 📌 Key Features
+## 📌 Features
 
-- **Declarative Configuration:** Define data sources and cleaning logic in YAML, not complex code.
-- **Flexible Transformations:** Use a built-in handler system for common data cleaning tasks (value replacement, column renaming, etc.).
-- **Generic Rules:** Apply a set of standard transformations to all files using a `generic.yaml` config.
-- **Database Ready:** Efficiently load processed data directly into PostgreSQL.
+- **Simple Interface:** Select your dataset (SINASC and SIM) and specify the base directory
+- **Automated Processing:** Handles download, transformation, and loading automatically
+- **Optimized Transformations:** Removes irrelevant columns and values while preserving analytical value
+  - [SIM Dictionary (EN)](docs/SIM.md)[ (PT)](docs/SIM%20PTBR.md)
+  - [SINASC Dictionary (EN)](docs/SINASC.md)[ (PT)](docs/SINASC%20PTBR.md)
+- **Multiple Output Formats:**
+  - Direct export to relational databases
+  - Merged single file for multi-year analysis
+  - Multiple files
 
 ## 📁 Project Structure
 
-After running, your data directory (`BASE_DIR`) will look like this:
+After running the pipeline, your data directory will be organized as follows:
 
 ```
 ./data
-├── raw/           # Downloaded CSV files
-└── processed/     # Cleaned and transformed files
+├── raw/                  # Downloaded CSV files
+├── processed/            # Cleaned and transformed files
+└── dataset.parquet.gzip  # (Optional) Merged file
 ```
 
-## Limitations
+## Limitation
 
-- Currently only supports CSV source files and PARQUET output files.
-- Each CSV file requires a corresponding YAML configuration file.
+- Supports only PARQUET output files.
+
 ## 📝 License
 [LGNU](LICENSE) | © GOPAD 2025
