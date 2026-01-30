@@ -25,7 +25,7 @@ etlSUS automates the entire process. Simply specify the dataset, and the library
 ### 1. Installation
 
 ```bash
-poetry add git+https://github.com/GOPAD-Datasus/ETL-DataSUS.git
+poetry add git+https://github.com/GOPAD-Datasus/etlSUS.git
 ```
 
 ### 2. Run the Pipeline
