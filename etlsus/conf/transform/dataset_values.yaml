@@ -74,6 +74,8 @@ SIM:
       DTNASC: '%d%m%Y'
       HORAOBITO: '%H%M'
       DTOBITO: '%d%m%Y'
+      DTINVESTIG: '%d%m%Y'
+      DTCONINV: '%d%m%Y'
 
     remove:
       HORAOBITO: ',hH'
