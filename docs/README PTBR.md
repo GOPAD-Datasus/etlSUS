@@ -35,7 +35,7 @@ from etlsus import pipeline
 if __name__ == '__main__':
     pipeline(
         dataset='SINASC',  # Escolha entre 'SINASC' ou 'SIM'
-        base_dir='caminho/para/diretorio/projeto',
+        data_dir='caminho/para/diretorio/de/dados',
     )
 ```
 
@@ -56,6 +56,8 @@ if __name__ == '__main__':
 Após executar o pipeline, seu diretório de dados será organizado da seguinte forma:
 
 ```
+# Usando data_dir = "./data"
+
 ./data
 ├── raw/                  # Arquivos CSV baixados
 ├── processed/            # Arquivos limpos e transformados

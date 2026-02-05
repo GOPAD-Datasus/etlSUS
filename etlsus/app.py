@@ -7,7 +7,7 @@ import sqlalchemy
 
 def pipeline(
         dataset: Literal['SINASC', 'SIM'],
-        base_dir: str,
+        data_dir: str,
         years_to_extract: list = None,
 
         formalize_columns: bool = True,
@@ -41,8 +41,8 @@ def pipeline(
     ----------
     dataset : SINASC or SIM
         Dataset to download data from
-    base_dir : Path
-        Base directory for downloaded files
+    data_dir : Path
+        Destination for downloaded files
     years_to_extract : List[int]
         Years to download
 
@@ -81,7 +81,7 @@ def pipeline(
     Warning
         If the pipeline fails to download a file
     """
-    os.environ['ETLSUS_BASE_DIR'] = base_dir
+    os.environ['ETLSUS_DATA_DIR'] = data_dir
 
     from .pipeline import run_pipeline
 

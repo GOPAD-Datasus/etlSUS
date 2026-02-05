@@ -37,7 +37,7 @@ from etlsus import pipeline
 if __name__ == '__main__':
     pipeline(
         dataset='SINASC',  # Choose between 'SINASC' or 'SIM'
-        base_dir='path/to/project/dir',
+        data_dir='path/to/data/dir',
     )
 ```
 
@@ -58,6 +58,8 @@ if __name__ == '__main__':
 After running the pipeline, your data directory will be organized as follows:
 
 ```
+# Using data_dir = "./data"
+
 ./data
 ├── raw/                  # Downloaded CSV files
 ├── processed/            # Cleaned and transformed files

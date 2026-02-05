@@ -3,13 +3,12 @@ import tempfile
 from pathlib import Path
 
 
-def create_base_dir() -> Path:
-    path = os.environ.get('ETLSUS_BASE_DIR', tempfile.gettempdir())
+def create_data_dir() -> Path:
+    path = os.environ.get('ETLSUS_DATA_DIR', tempfile.gettempdir())
     return Path(path).resolve()
 
 
-BASE_DIR = create_base_dir()
-DATA_DIR = BASE_DIR / 'data'
+DATA_DIR = create_data_dir()
 RAW_DIR = DATA_DIR / 'raw'
 PROCESSED_DIR = DATA_DIR / 'processed'
 
