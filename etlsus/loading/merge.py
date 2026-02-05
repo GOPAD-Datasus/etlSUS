@@ -16,7 +16,13 @@ def merger(infix: str) -> Path:
     output_path = config.DATA_DIR / f'{infix}.parquet.gzip'
 
     if output_path.exists():
-        return output_path
+        merge_nrows = pq.read_metadata(output_path).num_rows
+        files_nrows = [pq.read_metadata(file).num_rows for file in files]
+
+        if sum(files_nrows) != merge_nrows:
+            output_path.unlink()
+        else:
+            return output_path
 
     main_schema = pq.ParquetFile(files[0]).schema.to_arrow_schema()
 
